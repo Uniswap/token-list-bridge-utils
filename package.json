@@ -1,0 +1,61 @@
+{
+  "author": "Justin Domingue",
+  "devDependencies": {
+    "@size-limit/preset-small-lib": "^7.0.8",
+    "@tsconfig/recommended": "^1.0.1",
+    "@types/jest": "^27.4.1",
+    "@uniswap/token-lists": "^1.0.0-beta.27",
+    "dts-cli": "^1.4.0",
+    "husky": "^7.0.4",
+    "size-limit": "^7.0.8",
+    "tslib": "^2.3.1",
+    "typescript": "^4.5.5"
+  },
+  "engines": {
+    "node": ">=12"
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "dts lint"
+    }
+  },
+  "jest": {
+    "testEnvironment": "node"
+  },
+  "license": "GPL-3.0-or-later",
+  "main": "dist/index.js",
+  "module": "dist/token-list-bridge-utils.esm.js",
+  "name": "token-list-bridge-utils",
+  "peerDependencies": {},
+  "prettier": {
+    "printWidth": 80,
+    "semi": false,
+    "singleQuote": true,
+    "trailingComma": "es5"
+  },
+  "scripts": {
+    "analyze": "size-limit --why",
+    "build": "dts build",
+    "lint": "dts lint",
+    "prepare": "dts build",
+    "size": "size-limit",
+    "start": "dts watch",
+    "test": "dts test"
+  },
+  "size-limit": [
+    {
+      "limit": "10 KB",
+      "path": "dist/token-list-bridge-utils.cjs.production.min.js"
+    },
+    {
+      "limit": "10 KB",
+      "path": "dist/token-list-bridge-utils.esm.js"
+    }
+  ],
+  "typings": "dist/index.d.ts",
+  "version": "0.1.0"
+}
