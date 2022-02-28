@@ -1,0 +1,3 @@
+[submodule "src/arb-token-lists"]
+	path = src/arb-token-lists
+	url = https://github.com/OffchainLabs/arb-token-lists
