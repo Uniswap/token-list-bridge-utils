@@ -5,15 +5,18 @@ import { getMappingProvider } from './providers'
 import {
   compareTokenInfos,
   getTokenList,
-  TokenListOrFetchableTokenList,
+  TokenListOrFetchableTokenList
 } from './utils'
 import { verifyExtensions } from './verify'
 
-const list = 'https://gateway.ipfs.io/ipns/tokens.uniswap.org'
-
+/**
+ * Adds bridgeInfo to the given token list for Optimism, Polygon and Arbitrum.
+ * @param l1TokenListOrPathOrUrl
+ * @returns TokenList with l2 bridgeInfo filled
+ */
 export async function chainify(
   l1TokenListOrPathOrUrl: TokenListOrFetchableTokenList
-) {
+): Promise<TokenList> {
   const l1TokenList = await getTokenList(l1TokenListOrPathOrUrl)
 
   const optimisimed = await chainifyTokenList(
@@ -55,9 +58,7 @@ export async function chainifyTokenList(
   }
 }
 
-/**
- * Merges two token lists, resolving conflicts to primary list.
- */
+/** Merges two token lists, resolving conflicts to primary list. */
 export function mergeTokenLists(
   primary: TokenList,
   secondary: TokenList
