@@ -1,40 +1,91 @@
 import { TokenList } from '@uniswap/token-lists'
-import { generateTokenList } from './arb-token-lists/src/lib/token_list_gen'
-import { getTokenListObj } from './arb-token-lists/src/lib/utils'
+import { cloneDeep, groupBy, merge } from 'lodash'
+import { ChainId } from './constants/chainId'
+import { getMappingProvider } from './providers'
+import {
+  compareTokenInfos,
+  getTokenList,
+  TokenListOrFetchableTokenList,
+} from './utils'
+import { verifyExtensions } from './verify'
 
-export const sum = (a: number, b: number) => {
-  if ('development' === process.env.NODE_ENV) {
-    console.log('dev only output')
-  }
-  return a + b
-}
+const list = 'https://gateway.ipfs.io/ipns/tokens.uniswap.org'
 
-const supportedChains = { 1: true, 10: true }
-
-type L1Address = string
-type L2Address = string
-
-export function getImplementatinInChain(
-  chainId: keyof typeof supportedChains,
-  addressToLookup: string
+export async function chainify(
+  l1TokenListOrPathOrUrl: TokenListOrFetchableTokenList
 ) {
-  switch (chainId) {
+  const l1TokenList = await getTokenList(l1TokenListOrPathOrUrl)
+
+  const optimisimed = await chainifyTokenList(
+    ChainId.OPTIMISM,
+    l1TokenListOrPathOrUrl
+  )
+  const polygoned = await chainifyTokenList(
+    ChainId.POLYGON,
+    l1TokenListOrPathOrUrl
+  )
+  const arbified = await chainifyTokenList(
+    ChainId.ARBITRUM_ONE,
+    l1TokenListOrPathOrUrl
+  )
+
+  return mergeTokenLists(
+    l1TokenList, // providing l1 first to make sure duplicated tokens resolve to this list
+    mergeTokenLists(mergeTokenLists(arbified, optimisimed), polygoned)
+  )
+}
+
+/**
+ * Given a network and a TokenList, returns the TokenList with `extensions` filled.
+ * @param chainId chainId to operate on
+ * @param l1TokenListOrPathOrUrl either an L1 TokenList object or a path/url to a TokenList
+ * @returns L1 TokenList with `extensions` filled for the given network
+ */
+export async function chainifyTokenList(
+  chainId: ChainId,
+  l1TokenListOrPathOrUrl: TokenListOrFetchableTokenList
+): Promise<TokenList> {
+  try {
+    const tokenList = await getMappingProvider(chainId).provide(
+      await getTokenList(l1TokenListOrPathOrUrl)
+    )
+    return verifyExtensions(tokenList)
+  } catch (e) {
+    throw new Error(`An error occured: ${e}`)
   }
 }
 
-interface MappingProvider {
-  provide(pathOrUrl: string): Promise<TokenList>
-}
+/**
+ * Merges two token lists, resolving conflicts to primary list.
+ */
+export function mergeTokenLists(
+  primary: TokenList,
+  secondary: TokenList
+): TokenList {
+  primary = cloneDeep(primary)
+  secondary = cloneDeep(secondary)
 
-class ArbitrumMappingProvider implements MappingProvider {
-  async provide(pathOrUrl: string): Promise<TokenList> {
-    const l1TokenList = await getTokenListObj(pathOrUrl)
-    return generateTokenList(l1TokenList)
-  }
-}
+  const grouped = groupBy(
+    [...secondary.tokens, ...primary.tokens],
+    (t) => `${t.chainId}-${t.address.toLowerCase()}`
+  )
 
-class PolygonMappingProvider implements MappingProvider {
-  provide(pathOrUrl: any): Promise<TokenList> {
-    throw new Error('Method not implemented.')
-  }
+  const merged = Object.values(grouped).map((group) => {
+    if (group.length === 1) {
+      return group[0]
+    }
+
+    const merged = merge(group[0], group[1])
+    if (merged.extensions?.bridgeInfo) {
+      // remove reference to self-chain from merge
+      // @ts-expect-error TokenList schema doesn't yet define objects
+      delete merged.extensions.bridgeInfo[merged.chainId]
+    }
+    return merged
+  })
+
+  return cloneDeep({
+    ...primary,
+    tokens: merged.sort(compareTokenInfos),
+  })
 }

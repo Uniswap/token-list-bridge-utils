@@ -5,6 +5,7 @@
     "types"
   ],
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "ESNext",
+    "moduleResolution": "node"
   }
 }
