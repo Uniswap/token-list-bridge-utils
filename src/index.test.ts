@@ -1,15 +1,20 @@
 import { TokenInfo } from '@uniswap/token-lists'
 import { chainify, chainifyTokenList, mergeTokenLists } from '.'
 import { ChainId } from './constants/chainId'
-import { DAI, DAI_ARBITRUM_ONE, DAI_POLYGON } from './constants/tokens'
 import {
-  arbBridgeL1Address,
-  arbBridgeL2Address,
+  DAI,
+  DAI_ARBITRUM_ONE,
+  DAI_OPTIMISM,
+  DAI_POLYGON,
+} from './constants/tokens'
+import {
   arbedSampleTokenList,
   polygonedSampleTokenList,
   sampleL1TokenList,
   Tokens,
 } from './fixtures'
+
+jest.setTimeout(10000)
 
 describe(chainifyTokenList, () => {
   it('no-ops on Optimism', async () => {
@@ -129,8 +134,8 @@ describe(mergeTokenLists, () => {
             },
             [ChainId.ARBITRUM_ONE]: {
               tokenAddress: DAI_ARBITRUM_ONE.address,
-              destBridgeAddress: arbBridgeL2Address,
-              originBridgeAddress: arbBridgeL1Address,
+              // destBridgeAddress: arbBridgeL2Address,
+              // originBridgeAddress: arbBridgeL1Address,
             },
           },
         },
@@ -151,8 +156,8 @@ describe(mergeTokenLists, () => {
           bridgeInfo: {
             [ChainId.MAINNET]: {
               tokenAddress: DAI.address,
-              originBridgeAddress: arbBridgeL2Address,
-              destBridgeAddress: arbBridgeL1Address,
+              // originBridgeAddress: arbBridgeL2Address,
+              // destBridgeAddress: arbBridgeL1Address,
             },
           },
         },
@@ -170,13 +175,27 @@ describe(chainify, () => {
         ...Tokens[ChainId.MAINNET]!.DAI,
         extensions: {
           bridgeInfo: {
+            [ChainId.OPTIMISM]: {
+              tokenAddress: DAI_OPTIMISM.address,
+            },
             [ChainId.POLYGON]: {
               tokenAddress: DAI_POLYGON.address,
             },
             [ChainId.ARBITRUM_ONE]: {
               tokenAddress: DAI_ARBITRUM_ONE.address,
-              destBridgeAddress: arbBridgeL2Address,
-              originBridgeAddress: arbBridgeL1Address,
+              // destBridgeAddress: arbBridgeL2Address,
+              // originBridgeAddress: arbBridgeL1Address,
+            },
+          },
+        },
+      },
+      {
+        ...Tokens[ChainId.OPTIMISM]!.DAI,
+        name: 'Dai Stablecoin',
+        extensions: {
+          bridgeInfo: {
+            [ChainId.MAINNET]: {
+              tokenAddress: DAI.address,
             },
           },
         },
@@ -196,14 +215,12 @@ describe(chainify, () => {
         extensions: {
           bridgeInfo: {
             [ChainId.MAINNET]: {
-              tokenAddress: DAI.address.toLowerCase(),
-              originBridgeAddress: arbBridgeL2Address,
-              destBridgeAddress: arbBridgeL1Address,
+              tokenAddress: DAI.address,
+              // originBridgeAddress: arbBridgeL2Address,
+              // destBridgeAddress: arbBridgeL1Address,
             },
           },
         },
-        logoURI:
-          'https://assets.coingecko.com/coins/images/9956/thumb/4943.png?1636636734',
         name: 'Dai Stablecoin',
       },
     ])

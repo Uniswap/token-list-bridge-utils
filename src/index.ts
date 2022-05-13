@@ -1,11 +1,11 @@
 import { TokenList } from '@uniswap/token-lists'
 import { cloneDeep, groupBy, merge } from 'lodash'
 import { ChainId } from './constants/chainId'
-import { getMappingProvider } from './providers'
+import { buildList } from './providers'
 import {
   compareTokenInfos,
   getTokenList,
-  TokenListOrFetchableTokenList
+  TokenListOrFetchableTokenList,
 } from './utils'
 import { verifyExtensions } from './verify'
 
@@ -49,9 +49,8 @@ export async function chainifyTokenList(
   l1TokenListOrPathOrUrl: TokenListOrFetchableTokenList
 ): Promise<TokenList> {
   try {
-    const tokenList = await getMappingProvider(chainId).provide(
-      await getTokenList(l1TokenListOrPathOrUrl)
-    )
+    const l1TokenList = await getTokenList(l1TokenListOrPathOrUrl)
+    const tokenList = await buildList(chainId, l1TokenList)
     return verifyExtensions(tokenList)
   } catch (e) {
     throw new Error(`An error occured: ${e}`)
@@ -79,7 +78,6 @@ export function mergeTokenLists(
     const merged = merge(group[0], group[1])
     if (merged.extensions?.bridgeInfo) {
       // remove reference to self-chain from merge
-      // @ts-expect-error TokenList schema doesn't yet define objects
       delete merged.extensions.bridgeInfo[merged.chainId]
     }
     return merged
