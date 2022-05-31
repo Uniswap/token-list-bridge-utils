@@ -1,6 +1,7 @@
 import { TokenInfo } from '@uniswap/token-lists'
 import { chainify, chainifyTokenList, mergeTokenLists } from '.'
 import { ChainId } from './constants/chainId'
+import { ArbitrumMappingProvider } from './providers/ArbitrumMappingProvider'
 import {
   DAI,
   DAI_ARBITRUM_ONE,
@@ -9,24 +10,37 @@ import {
 } from './constants/tokens'
 import {
   arbedSampleTokenList,
+  optimizedSampleTokenList,
   polygonedSampleTokenList,
   sampleL1TokenList,
   Tokens,
 } from './fixtures'
 
-jest.setTimeout(10000)
+jest.setTimeout(15000)
 
 describe(chainifyTokenList, () => {
-  it('no-ops on Optimism', async () => {
+  it('outputs Optimism list correctly', async () => {
     const tokenList = await chainifyTokenList(
-      ChainId.ARBITRUM_ONE,
+      ChainId.OPTIMISM,
       sampleL1TokenList
     )
 
-    expect(tokenList).toEqual(tokenList)
+    expect(tokenList).toBeDefined()
+    expect(tokenList?.version).toEqual(polygonedSampleTokenList.version)
+    expect(
+      tokenList?.tokens.map((t) => [t.address, t.chainId, t.extensions])
+    ).toEqual(
+      // ignores other metadata
+      optimizedSampleTokenList.tokens.map((t) => [
+        t.address,
+        t.chainId,
+        t.extensions,
+      ])
+    )
   })
 
   it('outputs arbitrum list correctly', async () => {
+    mockArbitrumProvider()
     const tokenList = await chainifyTokenList(
       ChainId.ARBITRUM_ONE,
       sampleL1TokenList
@@ -165,9 +179,9 @@ describe(mergeTokenLists, () => {
     ])
   })
 })
-
 describe(chainify, () => {
   it('provides bridge extensions', async () => {
+    mockArbitrumProvider()
     const chainified = await chainify(sampleL1TokenList)
 
     expect(chainified.tokens).toEqual([
@@ -226,3 +240,14 @@ describe(chainify, () => {
     ])
   })
 })
+
+// Mocking arb provider due to required infura key for network call
+function mockArbitrumProvider() {
+  let arbTokenMap: { [key: string]: string | undefined } = {}
+  const DAI_ADDRESS: string = DAI.address.toLowerCase()
+  arbTokenMap[DAI_ADDRESS.toLowerCase()] =
+    DAI_ARBITRUM_ONE.address.toLowerCase()
+  var mockArbProvide = jest.fn()
+  mockArbProvide.mockImplementation(() => Promise.resolve(arbTokenMap))
+  ArbitrumMappingProvider.prototype.provide = mockArbProvide
+}
