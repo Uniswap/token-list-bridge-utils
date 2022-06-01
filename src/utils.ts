@@ -66,7 +66,7 @@ export const isTokenList = (obj: any) => {
   const expectedListKeys = ['name', 'timestamp', 'version', 'tokens']
   const actualListKeys = new Set(Object.keys(obj))
   if (!expectedListKeys.every((key) => actualListKeys.has(key))) {
-    throw new Error('tokenlist typeguard error: requried list key not included')
+    throw new Error('tokenlist typeguard error: required list key not included')
   }
   const { version, tokens } = obj
   if (

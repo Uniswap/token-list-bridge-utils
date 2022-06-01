@@ -3,8 +3,8 @@ import { ArbitrumMappingProvider } from './ArbitrumMappingProvider'
 import { OptimismMappingProvider } from './OptimismMappingProvider'
 import { PolygonMappingProvider } from './PolygonMappingProvider'
 import { TokenInfo, TokenList } from '@uniswap/token-lists'
-import { toChecksumAddress } from 'ethereum-checksum-address'
 import { compareTokenInfos } from '../utils'
+import { ethers } from 'ethers'
 
 export async function buildList(
   chainId: ChainId,
@@ -29,7 +29,7 @@ export async function buildList(
             extensions: {
               bridgeInfo: {
                 [rootToken.chainId]: {
-                  tokenAddress: toChecksumAddress(rootToken.address),
+                  tokenAddress: ethers.utils.getAddress(rootToken.address),
                 },
               },
             },
@@ -41,7 +41,7 @@ export async function buildList(
             extensions: {
               bridgeInfo: {
                 [chainId]: {
-                  tokenAddress: toChecksumAddress(
+                  tokenAddress: ethers.utils.getAddress(
                     typeof childToken === 'object'
                       ? childToken.child_token
                       : childToken!
@@ -60,7 +60,7 @@ export async function buildList(
       const childTokenInfo: TokenInfo = {
         ...rootToken,
         chainId: chainId,
-        address: toChecksumAddress(
+        address: ethers.utils.getAddress(
           typeof childToken === 'object' ? childToken.child_token : childToken!
         ),
         ...toRootExtensions,
