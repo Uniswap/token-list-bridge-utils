@@ -1,5 +1,7 @@
-import { TokenList } from '@uniswap/token-lists'
+import { PolygonMappedTokenData } from '../constants/types'
 
 export interface MappingProvider {
-  provide(l1TokenList: TokenList): Promise<TokenList>
+  provide(): Promise<
+    PolygonMappedTokenData | { [key: string]: string | undefined }
+  >
 }

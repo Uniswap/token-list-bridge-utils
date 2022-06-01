@@ -6,6 +6,9 @@
   ],
   "compilerOptions": {
     "module": "ESNext",
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "suppressImplicitAnyIndexErrors": true
   }
 }

@@ -1,27 +1,46 @@
 import { TokenInfo } from '@uniswap/token-lists'
 import { chainify, chainifyTokenList, mergeTokenLists } from '.'
 import { ChainId } from './constants/chainId'
-import { DAI, DAI_ARBITRUM_ONE, DAI_POLYGON } from './constants/tokens'
+import { ArbitrumMappingProvider } from './providers/ArbitrumMappingProvider'
 import {
-  arbBridgeL1Address,
-  arbBridgeL2Address,
+  DAI,
+  DAI_ARBITRUM_ONE,
+  DAI_OPTIMISM,
+  DAI_POLYGON,
+} from './constants/tokens'
+import {
   arbedSampleTokenList,
+  optimizedSampleTokenList,
   polygonedSampleTokenList,
   sampleL1TokenList,
   Tokens,
 } from './fixtures'
 
+jest.setTimeout(15000)
+
 describe(chainifyTokenList, () => {
-  it('no-ops on Optimism', async () => {
+  it('outputs Optimism list correctly', async () => {
     const tokenList = await chainifyTokenList(
-      ChainId.ARBITRUM_ONE,
+      ChainId.OPTIMISM,
       sampleL1TokenList
     )
 
-    expect(tokenList).toEqual(tokenList)
+    expect(tokenList).toBeDefined()
+    expect(tokenList?.version).toEqual(polygonedSampleTokenList.version)
+    expect(
+      tokenList?.tokens.map((t) => [t.address, t.chainId, t.extensions])
+    ).toEqual(
+      // ignores other metadata
+      optimizedSampleTokenList.tokens.map((t) => [
+        t.address,
+        t.chainId,
+        t.extensions,
+      ])
+    )
   })
 
   it('outputs arbitrum list correctly', async () => {
+    mockArbitrumProvider()
     const tokenList = await chainifyTokenList(
       ChainId.ARBITRUM_ONE,
       sampleL1TokenList
@@ -129,8 +148,8 @@ describe(mergeTokenLists, () => {
             },
             [ChainId.ARBITRUM_ONE]: {
               tokenAddress: DAI_ARBITRUM_ONE.address,
-              destBridgeAddress: arbBridgeL2Address,
-              originBridgeAddress: arbBridgeL1Address,
+              // destBridgeAddress: arbBridgeL2Address,
+              // originBridgeAddress: arbBridgeL1Address,
             },
           },
         },
@@ -151,8 +170,8 @@ describe(mergeTokenLists, () => {
           bridgeInfo: {
             [ChainId.MAINNET]: {
               tokenAddress: DAI.address,
-              originBridgeAddress: arbBridgeL2Address,
-              destBridgeAddress: arbBridgeL1Address,
+              // originBridgeAddress: arbBridgeL2Address,
+              // destBridgeAddress: arbBridgeL1Address,
             },
           },
         },
@@ -160,9 +179,9 @@ describe(mergeTokenLists, () => {
     ])
   })
 })
-
 describe(chainify, () => {
   it('provides bridge extensions', async () => {
+    mockArbitrumProvider()
     const chainified = await chainify(sampleL1TokenList)
 
     expect(chainified.tokens).toEqual([
@@ -170,13 +189,27 @@ describe(chainify, () => {
         ...Tokens[ChainId.MAINNET]!.DAI,
         extensions: {
           bridgeInfo: {
+            [ChainId.OPTIMISM]: {
+              tokenAddress: DAI_OPTIMISM.address,
+            },
             [ChainId.POLYGON]: {
               tokenAddress: DAI_POLYGON.address,
             },
             [ChainId.ARBITRUM_ONE]: {
               tokenAddress: DAI_ARBITRUM_ONE.address,
-              destBridgeAddress: arbBridgeL2Address,
-              originBridgeAddress: arbBridgeL1Address,
+              // destBridgeAddress: arbBridgeL2Address,
+              // originBridgeAddress: arbBridgeL1Address,
+            },
+          },
+        },
+      },
+      {
+        ...Tokens[ChainId.OPTIMISM]!.DAI,
+        name: 'Dai Stablecoin',
+        extensions: {
+          bridgeInfo: {
+            [ChainId.MAINNET]: {
+              tokenAddress: DAI.address,
             },
           },
         },
@@ -196,16 +229,25 @@ describe(chainify, () => {
         extensions: {
           bridgeInfo: {
             [ChainId.MAINNET]: {
-              tokenAddress: DAI.address.toLowerCase(),
-              originBridgeAddress: arbBridgeL2Address,
-              destBridgeAddress: arbBridgeL1Address,
+              tokenAddress: DAI.address,
+              // originBridgeAddress: arbBridgeL2Address,
+              // destBridgeAddress: arbBridgeL1Address,
             },
           },
         },
-        logoURI:
-          'https://assets.coingecko.com/coins/images/9956/thumb/4943.png?1636636734',
         name: 'Dai Stablecoin',
       },
     ])
   })
 })
+
+// Mocking arb provider due to required infura key for network call
+function mockArbitrumProvider() {
+  let arbTokenMap: { [key: string]: string | undefined } = {}
+  const DAI_ADDRESS: string = DAI.address.toLowerCase()
+  arbTokenMap[DAI_ADDRESS.toLowerCase()] =
+    DAI_ARBITRUM_ONE.address.toLowerCase()
+  var mockArbProvide = jest.fn()
+  mockArbProvide.mockImplementation(() => Promise.resolve(arbTokenMap))
+  ArbitrumMappingProvider.prototype.provide = mockArbProvide
+}

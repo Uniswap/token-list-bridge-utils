@@ -1,7 +1,12 @@
 import { Token } from '@uniswap/sdk-core'
 import { TokenInfo, TokenList } from '@uniswap/token-lists'
 import { ChainId } from '../constants/chainId'
-import { DAI, DAI_ARBITRUM_ONE, DAI_POLYGON } from '../constants/tokens'
+import {
+  DAI,
+  DAI_ARBITRUM_ONE,
+  DAI_OPTIMISM,
+  DAI_POLYGON,
+} from '../constants/tokens'
 import { compareTokenInfos } from '../utils'
 
 export const Tokens: Partial<Record<ChainId, Record<string, TokenInfo>>> = {
@@ -13,6 +18,9 @@ export const Tokens: Partial<Record<ChainId, Record<string, TokenInfo>>> = {
   },
   [ChainId.POLYGON]: {
     DAI: tokenToTokenInfo(DAI_POLYGON),
+  },
+  [ChainId.OPTIMISM]: {
+    DAI: tokenToTokenInfo(DAI_OPTIMISM),
   },
 }
 
@@ -40,8 +48,8 @@ export const arbedSampleTokenList = {
         bridgeInfo: {
           [ChainId.MAINNET]: {
             tokenAddress: DAI.address,
-            originBridgeAddress: arbBridgeL2Address,
-            destBridgeAddress: arbBridgeL1Address,
+            // originBridgeAddress: arbBridgeL2Address,
+            // destBridgeAddress: arbBridgeL1Address,
           },
         },
       },
@@ -52,8 +60,8 @@ export const arbedSampleTokenList = {
         bridgeInfo: {
           [ChainId.ARBITRUM_ONE]: {
             tokenAddress: DAI_ARBITRUM_ONE.address,
-            destBridgeAddress: arbBridgeL2Address,
-            originBridgeAddress: arbBridgeL1Address,
+            // destBridgeAddress: arbBridgeL2Address,
+            // originBridgeAddress: arbBridgeL1Address,
           },
         },
       },
@@ -80,6 +88,33 @@ export const polygonedSampleTokenList = {
         bridgeInfo: {
           [ChainId.POLYGON]: {
             tokenAddress: DAI_POLYGON.address,
+          },
+        },
+      },
+    } as unknown as TokenInfo,
+  ].sort(compareTokenInfos),
+}
+
+export const optimizedSampleTokenList = {
+  ...sampleL1TokenList,
+  name: 'Optimized Sample',
+  tokens: [
+    {
+      ...Tokens[ChainId.OPTIMISM]!.DAI,
+      extensions: {
+        bridgeInfo: {
+          [ChainId.MAINNET]: {
+            tokenAddress: DAI.address,
+          },
+        },
+      },
+    } as unknown as TokenInfo,
+    {
+      ...(Tokens[ChainId.MAINNET]!.DAI as unknown as TokenInfo),
+      extensions: {
+        bridgeInfo: {
+          [ChainId.OPTIMISM]: {
+            tokenAddress: DAI_OPTIMISM.address,
           },
         },
       },
