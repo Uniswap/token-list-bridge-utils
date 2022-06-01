@@ -57,19 +57,20 @@ export async function buildList(
         ...toChildExtensions,
       } as unknown as TokenInfo
 
-      const childTokenInfo: TokenInfo = {
-        ...rootToken,
-        chainId: chainId,
-        address: ethers.utils.getAddress(
-          typeof childToken === 'object' ? childToken.child_token : childToken!
-        ),
-        ...toRootExtensions,
-      } as unknown as TokenInfo
-
-      mappedTokens.push(rootTokenInfo)
       if (childTokenValid) {
+        const childTokenInfo: TokenInfo = {
+          ...rootToken,
+          chainId: chainId,
+          address: ethers.utils.getAddress(
+            typeof childToken === 'object'
+              ? childToken.child_token
+              : childToken!
+          ),
+          ...toRootExtensions,
+        } as unknown as TokenInfo
         mappedTokens.push(childTokenInfo)
       }
+      mappedTokens.push(rootTokenInfo)
     }
   }
   const tokenList = {
