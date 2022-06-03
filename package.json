@@ -62,7 +62,6 @@
     "@arbitrum/sdk": "^1.1.4",
     "@uniswap/sdk-core": "^3.0.1",
     "axios": "^0.26.0",
-    "dotenv": "^16.0.1",
     "ethers": "^5.6.5",
     "lodash": "^4.17.21"
   }

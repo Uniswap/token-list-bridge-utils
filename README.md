@@ -30,7 +30,7 @@ ex:
 Also adds a "root-level" token entry for each of the L2's that a token maps to.
 
 ex. for Optimism:
-`
+
 
     {
       "name": "Uniswap",
@@ -47,7 +47,7 @@ ex. for Optimism:
         }
       }
     }
-`
+
 
 ## Functions Overview
 
@@ -80,6 +80,13 @@ or
 
 `npm i @uniswap/token-list-bridge-utils`
 
+### Create .env file
+- Create a .env file in your package's root directory to set `MAINNET_RPC` value
+
+  - Sample .env file content:
+`MAINNET_RPC="https://mainnet.infura.io/v3/<infura key>"`
+  - You can also use a no-key RPC like `https://cloudflare-eth.com/` (see [ethereumnodes.com](https://ethereumnodes.com/))
+- Note: If this is not set correctly, library will throw a NETWORK_ERROR error code.
 ### Call Function
 #### CommonJS
 `const bridge_utils  = require('@uniswap/token-list-bridge-utils');`
@@ -93,8 +100,6 @@ or
 ## Run Tests
 
 `yarn install`
-
-`yarn build`
 
 `yarn test`
 
