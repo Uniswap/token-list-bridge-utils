@@ -1,3 +1,4 @@
+import './set_rpc.ts'
 import { providers } from 'ethers'
 import { getL1Network, getL2Network, MultiCaller } from '@arbitrum/sdk'
 
