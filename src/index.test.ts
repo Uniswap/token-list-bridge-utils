@@ -1,7 +1,6 @@
 import { TokenInfo } from '@uniswap/token-lists'
 import { chainify, chainifyTokenList, mergeTokenLists } from '.'
 import { ChainId } from './constants/chainId'
-import { ArbitrumMappingProvider } from './providers/ArbitrumMappingProvider'
 import {
   DAI,
   DAI_ARBITRUM_ONE,

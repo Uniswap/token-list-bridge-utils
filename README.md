@@ -80,13 +80,14 @@ or
 
 `npm i @uniswap/token-list-bridge-utils`
 
-### Create .env file
-- Create a .env file in your package's root directory to set `MAINNET_RPC` value
+### Create .env file (Optional)
+- By default, the library uses `https://cloudflare-eth.com/` as the MAINNET_RPC env variable value required by arbitrum-sdk. You can override this value by creating a .env file in your root directory and setting a value for MAINNET_RPC.
 
-  - Sample .env file content:
-`MAINNET_RPC="https://mainnet.infura.io/v3/<infura key>"`
-  - You can also use a no-key RPC like `https://cloudflare-eth.com/` (see [ethereumnodes.com](https://ethereumnodes.com/))
-- Note: If this is not set correctly, library will throw a NETWORK_ERROR error code.
+  - Sample .env file contents:
+
+    `MAINNET_RPC="https://mainnet.infura.io/v3/<infura key>"`
+- Note: If this is not set correctly, the library will throw a NETWORK_ERROR error code.
+
 ### Call Function
 #### CommonJS
 `const bridge_utils  = require('@uniswap/token-list-bridge-utils');`
@@ -102,7 +103,6 @@ or
 `yarn install`
 
 `yarn test`
-
 
 ## DTS User Guide
 
