@@ -1,12 +1,13 @@
+import './set_rpc.ts'
 import { providers } from 'ethers'
-import { config } from 'dotenv'
-import { getL1Network, getL2Network, MultiCaller } from '@arbitrum/sdk'
+
+const networkID = 42161
 
 // ref: https://github.com/OffchainLabs/arb-token-lists/blob/master/src/lib/instantiate_bridge.ts
-const networkID = 42161
-config()
-
 export const getNetworkConfig = async () => {
+  const { getL1Network, getL2Network, MultiCaller } = await import(
+    '@arbitrum/sdk'
+  )
   const l2Network = await getL2Network(networkID)
   const l1Network = await getL1Network(l2Network.partnerChainID)
 

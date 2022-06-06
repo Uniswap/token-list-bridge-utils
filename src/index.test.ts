@@ -1,7 +1,6 @@
 import { TokenInfo } from '@uniswap/token-lists'
 import { chainify, chainifyTokenList, mergeTokenLists } from '.'
 import { ChainId } from './constants/chainId'
-import { ArbitrumMappingProvider } from './providers/ArbitrumMappingProvider'
 import {
   DAI,
   DAI_ARBITRUM_ONE,
@@ -40,7 +39,6 @@ describe(chainifyTokenList, () => {
   })
 
   it('outputs arbitrum list correctly', async () => {
-    mockArbitrumProvider()
     const tokenList = await chainifyTokenList(
       ChainId.ARBITRUM_ONE,
       sampleL1TokenList
@@ -181,7 +179,6 @@ describe(mergeTokenLists, () => {
 })
 describe(chainify, () => {
   it('provides bridge extensions', async () => {
-    mockArbitrumProvider()
     const chainified = await chainify(sampleL1TokenList)
 
     expect(chainified.tokens).toEqual([
@@ -240,14 +237,3 @@ describe(chainify, () => {
     ])
   })
 })
-
-// Mocking arb provider due to required infura key for network call
-function mockArbitrumProvider() {
-  let arbTokenMap: { [key: string]: string | undefined } = {}
-  const DAI_ADDRESS: string = DAI.address.toLowerCase()
-  arbTokenMap[DAI_ADDRESS.toLowerCase()] =
-    DAI_ARBITRUM_ONE.address.toLowerCase()
-  var mockArbProvide = jest.fn()
-  mockArbProvide.mockImplementation(() => Promise.resolve(arbTokenMap))
-  ArbitrumMappingProvider.prototype.provide = mockArbProvide
-}
