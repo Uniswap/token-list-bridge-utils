@@ -11,6 +11,7 @@ import {
   getTokenSymbolFromContract,
 } from '../utils'
 import ERC20Abi from '../abis/erc20'
+// TODO: use ethers for contract calls (without performance reduction).
 import Web3 from 'web3'
 
 const web3 = new Web3()
