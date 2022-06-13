@@ -1,6 +1,8 @@
 import { TokenInfo, TokenList } from '@uniswap/token-lists'
 import { readFileSync, existsSync } from 'fs'
 import axios from 'axios'
+import { ChainId } from './constants/chainId'
+import { Contract } from 'web3-eth-contract'
 
 export type TokenListOrFetchableTokenList = TokenList | string
 
@@ -88,4 +90,31 @@ export const isTokenList = (obj: any) => {
   ) {
     throw new Error('tokenlist typeguard error: token missing required key')
   }
+}
+
+export function getRpcUrl(chainId: ChainId): string {
+  switch (chainId) {
+    case ChainId.MAINNET:
+      return 'https://cloudflare-eth.com/'
+    case ChainId.RINKEBY:
+    case ChainId.OPTIMISM:
+      return 'https://mainnet.optimism.io'
+    case ChainId.OPTIMISTIC_KOVAN:
+      return 'https://kovan.optimism.io'
+    case ChainId.ARBITRUM_ONE:
+      return 'https://arb1.arbitrum.io/rpc'
+    case ChainId.ARBITRUM_RINKEBY:
+      return 'https://rinkeby.arbitrum.io/rpc'
+    case ChainId.POLYGON:
+      return 'https://polygon-rpc.com/'
+    case ChainId.POLYGON_MUMBAI:
+      return 'https://rpc-endpoints.superfluid.dev/mumbai'
+    default:
+  }
+  throw new Error('Unsupported ChainId')
+}
+
+export async function getTokenSymbolFromContract(tokenContract: Contract) {
+  const symbol = await Promise.all([tokenContract.methods.symbol().call()])
+  return symbol
 }
