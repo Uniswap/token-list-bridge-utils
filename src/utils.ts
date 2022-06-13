@@ -96,7 +96,6 @@ export function getRpcUrl(chainId: ChainId): string {
   switch (chainId) {
     case ChainId.MAINNET:
       return 'https://cloudflare-eth.com/'
-    case ChainId.RINKEBY:
     case ChainId.OPTIMISM:
       return 'https://mainnet.optimism.io'
     case ChainId.OPTIMISTIC_KOVAN:
