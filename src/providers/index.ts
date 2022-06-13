@@ -1,15 +1,26 @@
 import { ChainId } from '../constants/chainId'
+import { Contract } from 'web3-eth-contract'
 import { ArbitrumMappingProvider } from './ArbitrumMappingProvider'
 import { OptimismMappingProvider } from './OptimismMappingProvider'
 import { PolygonMappingProvider } from './PolygonMappingProvider'
 import { TokenInfo, TokenList } from '@uniswap/token-lists'
-import { compareTokenInfos } from '../utils'
 import { ethers } from 'ethers'
+import {
+  compareTokenInfos,
+  getRpcUrl,
+  getTokenSymbolFromContract,
+} from '../utils'
+import ERC20Abi from '../abis/erc20'
+// TODO: use ethers for contract calls (without performance reduction).
+import Web3 from 'web3'
+
+const web3 = new Web3()
 
 export async function buildList(
   chainId: ChainId,
   l1TokenList: TokenList
 ): Promise<TokenList> {
+  web3.setProvider(getRpcUrl(chainId))
   const tokenAddressMap = await getMappingProvider(
     chainId,
     l1TokenList
@@ -17,9 +28,15 @@ export async function buildList(
   const mappedTokens = []
   for (const rootToken of l1TokenList.tokens) {
     const childToken = tokenAddressMap[rootToken.address.toLowerCase()]
+    const childTokenAddress = childToken
+      ? ethers.utils.getAddress(
+          typeof childToken === 'object' ? childToken.child_token : childToken
+        )
+      : undefined
     const childTokenValid = Boolean(
-      childToken &&
-        (typeof childToken === 'object' ? !childToken.deleted : true)
+      childTokenAddress &&
+        (typeof childToken === 'object' ? !childToken.deleted : true) &&
+        (await hasExistingTokenContract(childTokenAddress, chainId))
     )
 
     if (rootToken.chainId === ChainId.MAINNET) {
@@ -41,11 +58,7 @@ export async function buildList(
             extensions: {
               bridgeInfo: {
                 [chainId]: {
-                  tokenAddress: ethers.utils.getAddress(
-                    typeof childToken === 'object'
-                      ? childToken.child_token
-                      : childToken!
-                  ),
+                  tokenAddress: childTokenAddress,
                 },
               },
             },
@@ -61,11 +74,7 @@ export async function buildList(
         const childTokenInfo: TokenInfo = {
           ...rootToken,
           chainId: chainId,
-          address: ethers.utils.getAddress(
-            typeof childToken === 'object'
-              ? childToken.child_token
-              : childToken!
-          ),
+          address: childTokenAddress,
           ...toRootExtensions,
         } as unknown as TokenInfo
         mappedTokens.push(childTokenInfo)
@@ -81,6 +90,17 @@ export async function buildList(
   }
 
   return tokenList
+}
+
+// using a symbol lookup contract call to check whether the token exists on the L2
+async function hasExistingTokenContract(address: string, chainId: ChainId) {
+  try {
+    const contract: Contract = new web3.eth.Contract(ERC20Abi, address)
+    await getTokenSymbolFromContract(contract)
+  } catch {
+    return false
+  }
+  return true
 }
 
 function getMappingProvider(chainId: ChainId, l1TokenList: TokenList) {
