@@ -1,3 +1,25 @@
 {
-    "jest.jestCommandLine": "yarn test"
+  "jest.jestCommandLine": "yarn test",
+  "editor.formatOnSave": true,
+  "editor.tabSize": 2,
+  "javascript.format.enable": true,
+  "prettier.printWidth": 120,
+  "prettier.singleQuote": true,
+  "prettier.tabWidth": 2,
+  "typescript.format.enable": true,
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  }
 }

@@ -18,16 +18,13 @@ export async function chainify(
   l1TokenListOrPathOrUrl: TokenListOrFetchableTokenList
 ): Promise<TokenList> {
   const l1TokenList = await getTokenList(l1TokenListOrPathOrUrl)
-  const l2Chains =  [ChainId.POLYGON, ChainId.ARBITRUM_ONE, ChainId.OPTIMISM]
+  const l2Chains = [ChainId.POLYGON, ChainId.ARBITRUM_ONE, ChainId.OPTIMISM]
 
-  const chainified = await chainifyTokenList(
-    l2Chains, l1TokenListOrPathOrUrl
-  )
-  
+  const chainified = await chainifyTokenList(l2Chains, l1TokenListOrPathOrUrl)
   return mergeTokenLists(
     l1TokenList, // providing l1 first to make sure duplicated tokens resolve to this list
-   chainified)
-  
+    chainified
+  )
 }
 
 /**
