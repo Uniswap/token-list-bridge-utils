@@ -29,17 +29,17 @@ export async function chainify(
 
 /**
  * Given a network and a TokenList, returns the TokenList with `extensions` filled.
- * @param chainIds chainIds to operate on
+ * @param l2ChainIds layer 2 chainIds to operate on
  * @param l1TokenListOrPathOrUrl either an L1 TokenList object or a path/url to a TokenList
  * @returns L1 TokenList with `extensions` filled for the given network
  */
 export async function chainifyTokenList(
-  chainIds: Array<ChainId>,
+  l2ChainIds: Array<ChainId>,
   l1TokenListOrPathOrUrl: TokenListOrFetchableTokenList
 ): Promise<TokenList> {
   try {
     const l1TokenList = await getTokenList(l1TokenListOrPathOrUrl)
-    const tokenList = await buildList(l1TokenList, chainIds)
+    const tokenList = await buildList(l2ChainIds, l1TokenList)
     return verifyExtensions(tokenList)
   } catch (e) {
     throw new Error(`An error occured: ${e}`)

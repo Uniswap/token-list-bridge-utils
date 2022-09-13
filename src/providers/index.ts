@@ -30,15 +30,15 @@ let arbitrumMappings: GenericMappedTokenData | undefined
 let optimismMappings: GenericMappedTokenData | undefined
 
 export async function buildList(
-  l1TokenList: TokenList,
-  l2Chains: Array<ChainId>
+  l2ChainIds: Array<ChainId>,
+  l1TokenList: TokenList
 ): Promise<TokenList> {
   const multiChainedTokens: TokenInfo[] = []
-  validateChains(l2Chains)
-  await generateTokenMappings(l2Chains, l1TokenList)
+  validateChains(l2ChainIds)
+  await generateTokenMappings(l2ChainIds, l1TokenList)
 
   for (const l1Token of l1TokenList.tokens) {
-    let chainToChildTokenDetailsMap: {
+    const chainIdToChildTokenDetailsMap: {
       [key: number]: {
         childTokenValid: boolean
         childTokenAddress: string | undefined
@@ -54,20 +54,20 @@ export async function buildList(
 
       // build out the extensions.bridgeInfo data containing mappings for mainnet + all requested chains that the current token is valid in.
       await Promise.all(
-        l2Chains.concat([ChainId.MAINNET]).map(async (chainId) => {
+        l2ChainIds.concat([ChainId.MAINNET]).map(async (chainId) => {
           if (chainId === ChainId.MAINNET) {
             completeExtensions.extensions.bridgeInfo[ChainId.MAINNET] = {
               tokenAddress: ethers.utils.getAddress(l1Token.address),
             }
           } else {
-            chainToChildTokenDetailsMap[chainId] = await getChildTokenDetails(
+            chainIdToChildTokenDetailsMap[chainId] = await getChildTokenDetails(
               l1Token,
               chainId
             )
-            if (chainToChildTokenDetailsMap[chainId].childTokenValid) {
+            if (chainIdToChildTokenDetailsMap[chainId].childTokenValid) {
               completeExtensions.extensions.bridgeInfo[chainId] = {
                 tokenAddress:
-                  chainToChildTokenDetailsMap[chainId].childTokenAddress,
+                  chainIdToChildTokenDetailsMap[chainId].childTokenAddress,
               }
             }
           }
@@ -75,12 +75,12 @@ export async function buildList(
       )
 
       // build the TokenInfo objects with bridgeInfo extension (omitting the TokenInfo's chain from the completeExtensions built above) and add them to multiChainedTokens
-      l2Chains.concat([ChainId.MAINNET]).forEach((chainId) => {
+      l2ChainIds.concat([ChainId.MAINNET]).forEach((chainId) => {
         if (
           chainId === ChainId.MAINNET ||
-          chainToChildTokenDetailsMap[chainId].childTokenValid
+          chainIdToChildTokenDetailsMap[chainId].childTokenValid
         ) {
-          let extensionToAdd = omitKeyIfPresent(
+          const extensionToAdd = omitKeyIfPresent(
             [chainId],
             completeExtensions.extensions.bridgeInfo
           )
@@ -99,7 +99,7 @@ export async function buildList(
                   ...l1Token,
                   chainId: chainId,
                   address:
-                    chainToChildTokenDetailsMap[chainId].childTokenAddress,
+                    chainIdToChildTokenDetailsMap[chainId].childTokenAddress,
                   extensions:
                     Object.keys(extensionToAdd).length > 0
                       ? {
@@ -114,7 +114,7 @@ export async function buildList(
     }
   }
   const tokenList = {
-    name: `(ChainIds: ${l2Chains}) ${l1TokenList.name}`,
+    name: `(ChainIds: ${l2ChainIds}) ${l1TokenList.name}`,
     timestamp: new Date().toISOString(),
     version: l1TokenList.version,
     tokens: multiChainedTokens.sort(compareTokenInfos),
