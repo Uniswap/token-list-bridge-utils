@@ -25,27 +25,26 @@ const SUPPORTED_L2_CHAINS = [
   ChainId.OPTIMISM,
 ]
 
-let polygonMappings: PolygonMappedTokenData | undefined
-let arbitrumMappings: GenericMappedTokenData | undefined
-let optimismMappings: GenericMappedTokenData | undefined
+const chainIdToMappingsMap: {
+  [key: number]: PolygonMappedTokenData | GenericMappedTokenData
+} = {}
 
 export async function buildList(
   l2ChainIds: Array<ChainId>,
   l1TokenList: TokenList
 ): Promise<TokenList> {
-  const multiChainedTokens: TokenInfo[] = []
   validateChains(l2ChainIds)
+  const multiChainedTokens: TokenInfo[] = []
   await generateTokenMappings(l2ChainIds, l1TokenList)
 
   for (const l1Token of l1TokenList.tokens) {
-    const chainIdToChildTokenDetailsMap: {
-      [key: number]: {
-        childTokenValid: boolean
-        childTokenAddress: string | undefined
-      }
-    } = {}
-
     if (l1Token.chainId === ChainId.MAINNET) {
+      const chainIdToChildTokenDetailsMap: {
+        [key: number]: {
+          childTokenValid: boolean
+          childTokenAddress: string | undefined
+        }
+      } = {}
       const completeExtensions = {
         extensions: {
           bridgeInfo: {},
@@ -113,6 +112,8 @@ export async function buildList(
       })
     }
   }
+
+  // build and return final chainified token list
   const tokenList = {
     name: `(ChainIds: ${l2ChainIds}) ${l1TokenList.name}`,
     timestamp: new Date().toISOString(),
@@ -149,43 +150,18 @@ function getMappingProvider(chainId: ChainId, l1TokenList: TokenList) {
   }
 }
 
-function getMappingsByChain(chainId: ChainId) {
-  switch (chainId) {
-    case ChainId.ARBITRUM_ONE:
-      return arbitrumMappings
-    case ChainId.OPTIMISM:
-      return optimismMappings
-    case ChainId.POLYGON:
-      return polygonMappings
-    default:
-      throw new Error(`Chain ${chainId} not supported.`)
-  }
-}
-
+// returns the mappings for chainIds in the same order as the chainIds list it recieved
 async function generateTokenMappings(
   chainIds: ChainId[],
   l1TokenList: TokenList
 ) {
-  arbitrumMappings = chainIds.includes(ChainId.ARBITRUM_ONE)
-    ? ((await getMappingProvider(
-        ChainId.ARBITRUM_ONE,
-        l1TokenList
-      ).provide()) as GenericMappedTokenData)
-    : undefined
-
-  polygonMappings = chainIds.includes(ChainId.POLYGON)
-    ? ((await getMappingProvider(
-        ChainId.POLYGON,
-        l1TokenList
-      ).provide()) as PolygonMappedTokenData)
-    : undefined
-
-  optimismMappings = chainIds.includes(ChainId.OPTIMISM)
-    ? ((await getMappingProvider(
-        ChainId.OPTIMISM,
-        l1TokenList
-      ).provide()) as GenericMappedTokenData)
-    : undefined
+  // using for await to maintain order
+  for await (const chainId of chainIds) {
+    chainIdToMappingsMap[chainId] = await getMappingProvider(
+      chainId,
+      l1TokenList
+    ).provide()
+  }
 }
 
 // handles both string and object cases for childToken (Polygon mappings return object)
@@ -196,7 +172,8 @@ async function getChildTokenDetails(
   childTokenValid: boolean
   childTokenAddress: string | undefined
 }> {
-  const childToken = getMappingsByChain(chainId)![l1Token.address.toLowerCase()]
+  const childToken =
+    chainIdToMappingsMap[chainId][l1Token.address.toLowerCase()]
 
   const childTokenAddress = childToken
     ? ethers.utils.getAddress(
@@ -223,8 +200,8 @@ function omitKeyIfPresent(key: any, obj: { [x: string]: any }) {
   return obj
 }
 
-function validateChains(requestedL2Chains: ChainId[]) {
-  requestedL2Chains.forEach((chainId) => {
+function validateChains(l2ChainIds: ChainId[]) {
+  l2ChainIds.forEach((chainId) => {
     if (!SUPPORTED_L2_CHAINS.includes(chainId)) {
       throw new Error(`Chain ${chainId} not supported.`)
     }
