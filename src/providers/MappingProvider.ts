@@ -1,7 +1,7 @@
-import { PolygonMappedTokenData } from '../constants/types'
+import { GenericMappedTokenData, PolygonMappedTokenData } from '../constants/types'
 
 export interface MappingProvider {
   provide(): Promise<
-    PolygonMappedTokenData | { [key: string]: string | undefined }
+    PolygonMappedTokenData | GenericMappedTokenData
   >
 }

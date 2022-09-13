@@ -1,6 +1,7 @@
 import { MappingProvider } from './MappingProvider'
 import { ChainId } from '../constants/chainId'
 import { getTokenList } from '../utils'
+import { GenericMappedTokenData } from '../constants/types'
 
 const optimismTokenListURL =
   'https://raw.githubusercontent.com/' +
@@ -12,7 +13,7 @@ const optimismTokenListURL =
  * This provider provides the l1->l2(Optimism) token mappings.
  */
 export class OptimismMappingProvider implements MappingProvider {
-  async provide(): Promise<{ [key: string]: string | undefined }> {
+  async provide(): Promise<GenericMappedTokenData> {
     const tokens: { [key: string]: string | undefined } = {}
 
     let optimismTokens = await getTokenList(optimismTokenListURL)
