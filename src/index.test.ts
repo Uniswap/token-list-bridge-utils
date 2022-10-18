@@ -20,7 +20,7 @@ jest.setTimeout(15000)
 describe(chainifyTokenList, () => {
   it('outputs Optimism list correctly', async () => {
     const tokenList = await chainifyTokenList(
-      [ChainId.OPTIMISM],
+      ChainId.OPTIMISM,
       sampleL1TokenList
     )
 
@@ -40,7 +40,7 @@ describe(chainifyTokenList, () => {
 
   it('outputs arbitrum list correctly', async () => {
     const tokenList = await chainifyTokenList(
-      [ChainId.ARBITRUM_ONE],
+      ChainId.ARBITRUM_ONE,
       sampleL1TokenList
     )
 
@@ -64,7 +64,7 @@ describe(chainifyTokenList, () => {
 
   it('outputs polygon list correctly', async () => {
     const tokenList = await chainifyTokenList(
-      [ChainId.POLYGON],
+      ChainId.POLYGON,
       sampleL1TokenList
     )
 
@@ -146,6 +146,8 @@ describe(mergeTokenLists, () => {
             },
             [ChainId.ARBITRUM_ONE]: {
               tokenAddress: DAI_ARBITRUM_ONE.address,
+              // destBridgeAddress: arbBridgeL2Address,
+              // originBridgeAddress: arbBridgeL1Address,
             },
           },
         },
@@ -166,6 +168,8 @@ describe(mergeTokenLists, () => {
           bridgeInfo: {
             [ChainId.MAINNET]: {
               tokenAddress: DAI.address,
+              // originBridgeAddress: arbBridgeL2Address,
+              // destBridgeAddress: arbBridgeL1Address,
             },
           },
         },
@@ -190,6 +194,8 @@ describe(chainify, () => {
             },
             [ChainId.ARBITRUM_ONE]: {
               tokenAddress: DAI_ARBITRUM_ONE.address,
+              // destBridgeAddress: arbBridgeL2Address,
+              // originBridgeAddress: arbBridgeL1Address,
             },
           },
         },
@@ -202,12 +208,6 @@ describe(chainify, () => {
             [ChainId.MAINNET]: {
               tokenAddress: DAI.address,
             },
-            [ChainId.POLYGON]: {
-              tokenAddress: DAI_POLYGON.address,
-            },
-            [ChainId.ARBITRUM_ONE]: {
-              tokenAddress: DAI_ARBITRUM_ONE.address,
-            },
           },
         },
       },
@@ -218,12 +218,6 @@ describe(chainify, () => {
             [ChainId.MAINNET]: {
               tokenAddress: DAI.address,
             },
-            [ChainId.OPTIMISM]: {
-              tokenAddress: DAI_OPTIMISM.address,
-            },
-            [ChainId.ARBITRUM_ONE]: {
-              tokenAddress: DAI_ARBITRUM_ONE.address,
-            },
           },
         },
       },
@@ -233,12 +227,8 @@ describe(chainify, () => {
           bridgeInfo: {
             [ChainId.MAINNET]: {
               tokenAddress: DAI.address,
-            },
-            [ChainId.OPTIMISM]: {
-              tokenAddress: DAI_OPTIMISM.address,
-            },
-            [ChainId.POLYGON]: {
-              tokenAddress: DAI_POLYGON.address,
+              // originBridgeAddress: arbBridgeL2Address,
+              // destBridgeAddress: arbBridgeL1Address,
             },
           },
         },

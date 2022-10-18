@@ -18,7 +18,12 @@ export async function chainify(
   l1TokenListOrPathOrUrl: TokenListOrFetchableTokenList
 ): Promise<TokenList> {
   const l1TokenList = await getTokenList(l1TokenListOrPathOrUrl)
-  const l2Chains = [ChainId.POLYGON, ChainId.ARBITRUM_ONE, ChainId.OPTIMISM]
+  const l2Chains = [
+    ChainId.POLYGON,
+    ChainId.ARBITRUM_ONE,
+    ChainId.OPTIMISM,
+    ChainId.CELO,
+  ]
 
   const chainified = await chainifyTokenList(l2Chains, l1TokenListOrPathOrUrl)
   return mergeTokenLists(

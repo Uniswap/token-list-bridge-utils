@@ -23,11 +23,8 @@ const SUPPORTED_L2_CHAINS = [
   ChainId.ARBITRUM_ONE,
   ChainId.POLYGON,
   ChainId.OPTIMISM,
+  ChainId.CELO,
 ]
-
-const chainIdToMappingsMap: {
-  [key: number]: PolygonMappedTokenData | GenericMappedTokenData
-} = {}
 
 export async function buildList(
   l2ChainIds: Array<ChainId>,
@@ -35,8 +32,10 @@ export async function buildList(
 ): Promise<TokenList> {
   validateChains(l2ChainIds)
   const multiChainedTokens: TokenInfo[] = []
-  await generateTokenMappings(l2ChainIds, l1TokenList)
-
+  const chainIdToMappingsMap = await generateTokenMappings(
+    l2ChainIds,
+    l1TokenList
+  )
   for (const l1Token of l1TokenList.tokens) {
     if (l1Token.chainId === ChainId.MAINNET) {
       const chainIdToChildTokenDetailsMap: {
@@ -45,29 +44,23 @@ export async function buildList(
           childTokenAddress: string | undefined
         }
       } = {}
-      const completeExtensions = {
+      const l2MappingExtension = {
         extensions: {
           bridgeInfo: {},
         },
       }
-
-      // build out the extensions.bridgeInfo data containing mappings for mainnet + all requested chains that the current token is valid in.
+      // build out the extensions.bridgeInfo data containing mappings for each L2 chain
       await Promise.all(
-        l2ChainIds.concat([ChainId.MAINNET]).map(async (chainId) => {
-          if (chainId === ChainId.MAINNET) {
-            completeExtensions.extensions.bridgeInfo[ChainId.MAINNET] = {
-              tokenAddress: ethers.utils.getAddress(l1Token.address),
-            }
-          } else {
-            chainIdToChildTokenDetailsMap[chainId] = await getChildTokenDetails(
-              l1Token,
-              chainId
-            )
-            if (chainIdToChildTokenDetailsMap[chainId].childTokenValid) {
-              completeExtensions.extensions.bridgeInfo[chainId] = {
-                tokenAddress:
-                  chainIdToChildTokenDetailsMap[chainId].childTokenAddress,
-              }
+        l2ChainIds.map(async (chainId) => {
+          chainIdToChildTokenDetailsMap[chainId] = await getChildTokenDetails(
+            l1Token,
+            chainId,
+            chainIdToMappingsMap
+          )
+          if (chainIdToChildTokenDetailsMap[chainId].childTokenValid) {
+            l2MappingExtension.extensions.bridgeInfo[chainId] = {
+              tokenAddress:
+                chainIdToChildTokenDetailsMap[chainId].childTokenAddress,
             }
           }
         })
@@ -79,18 +72,15 @@ export async function buildList(
           chainId === ChainId.MAINNET ||
           chainIdToChildTokenDetailsMap[chainId].childTokenValid
         ) {
-          const extensionToAdd = omitKeyIfPresent(
-            [chainId],
-            completeExtensions.extensions.bridgeInfo
-          )
           const tokenInfo: TokenInfo =
             chainId === ChainId.MAINNET
               ? ({
                   ...l1Token,
                   extensions:
-                    Object.keys(extensionToAdd).length > 0
+                    Object.keys(l2MappingExtension.extensions.bridgeInfo)
+                      .length > 0
                       ? {
-                          bridgeInfo: extensionToAdd,
+                          bridgeInfo: l2MappingExtension.extensions.bridgeInfo,
                         }
                       : undefined,
                 } as unknown as TokenInfo)
@@ -99,12 +89,13 @@ export async function buildList(
                   chainId: chainId,
                   address:
                     chainIdToChildTokenDetailsMap[chainId].childTokenAddress,
-                  extensions:
-                    Object.keys(extensionToAdd).length > 0
-                      ? {
-                          bridgeInfo: extensionToAdd,
-                        }
-                      : undefined,
+                  extensions: {
+                    bridgeInfo: {
+                      [ChainId.MAINNET]: {
+                        tokenAddress: ethers.utils.getAddress(l1Token.address),
+                      },
+                    },
+                  },
                 } as unknown as TokenInfo)
 
           multiChainedTokens.push(tokenInfo)
@@ -146,7 +137,7 @@ function getMappingProvider(chainId: ChainId, l1TokenList: TokenList) {
     case ChainId.POLYGON:
       return new PolygonMappingProvider()
     default:
-      throw new Error(`Chain ${chainId} not supported.`)
+      throw new Error(`Chain ${chainId} not supported for fetching mappings.`)
   }
 }
 
@@ -155,49 +146,60 @@ async function generateTokenMappings(
   chainIds: ChainId[],
   l1TokenList: TokenList
 ) {
-  // using for await to maintain order
-  for await (const chainId of chainIds) {
-    chainIdToMappingsMap[chainId] = await getMappingProvider(
-      chainId,
-      l1TokenList
-    ).provide()
+  const chainIdToMappingsMap: {
+    [key: number]: PolygonMappedTokenData | GenericMappedTokenData
+  } = {}
+
+  for (const chainId of chainIds) {
+    // don't have mapping provider for CELO, just use manual entry for now
+    if (chainId !== ChainId.CELO) {
+      chainIdToMappingsMap[chainId] = await getMappingProvider(
+        chainId,
+        l1TokenList
+      ).provide()
+    }
   }
+
+  return chainIdToMappingsMap
 }
 
 // handles both string and object cases for childToken (Polygon mappings return object)
 async function getChildTokenDetails(
   l1Token: TokenInfo,
-  chainId: ChainId
+  chainId: ChainId,
+  chainIdToMappingsMap: {
+    [key: number]: PolygonMappedTokenData | GenericMappedTokenData
+  }
 ): Promise<{
   childTokenValid: boolean
   childTokenAddress: string | undefined
 }> {
-  const childToken =
-    chainIdToMappingsMap[chainId][l1Token.address.toLowerCase()]
+  const existingMapping: undefined | string =
+    l1Token?.extensions?.bridgeInfo?.[chainId]?.tokenAddress
+  // only use the externally fetched mappings if manual entry doesnt exist for the token/chain mapping
+  if (chainId !== ChainId.CELO && existingMapping === undefined) {
+    const childToken =
+      chainIdToMappingsMap[chainId][l1Token.address.toLowerCase()]
 
-  const childTokenAddress = childToken
-    ? ethers.utils.getAddress(
-        typeof childToken === 'object' ? childToken.child_token : childToken
-      )
-    : undefined
-  const childTokenValid = Boolean(
-    childTokenAddress &&
-      (typeof childToken === 'object' ? !childToken.deleted : true) &&
-      (await hasExistingTokenContract(childTokenAddress, chainId))
-  )
+    const childTokenAddress = childToken
+      ? ethers.utils.getAddress(
+          typeof childToken === 'object' ? childToken.child_token : childToken
+        )
+      : undefined
+    const childTokenValid = Boolean(
+      childTokenAddress &&
+        (typeof childToken === 'object' ? !childToken.deleted : true) &&
+        (await hasExistingTokenContract(childTokenAddress, chainId))
+    )
+    return {
+      childTokenValid: childTokenValid,
+      childTokenAddress: childTokenAddress,
+    }
+  }
   return {
-    childTokenValid: childTokenValid,
-    childTokenAddress: childTokenAddress,
+    childTokenValid: existingMapping ? true : false,
+    childTokenAddress: existingMapping,
   }
-}
-
-function omitKeyIfPresent(key: any, obj: { [x: string]: any }) {
-  if (obj[key]) {
-    const { [key]: omitted, ...rest } = obj
-    return rest
-  }
-
-  return obj
 }
 
 function validateChains(l2ChainIds: ChainId[]) {
