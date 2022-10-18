@@ -19,18 +19,18 @@ import {
 } from '../constants/types'
 
 const web3 = new Web3()
+
+// chains we support fetching mappings for (can be different than passed in l2ChainIds arg)
 const SUPPORTED_L2_CHAINS = [
   ChainId.ARBITRUM_ONE,
   ChainId.POLYGON,
   ChainId.OPTIMISM,
-  ChainId.CELO,
 ]
 
 export async function buildList(
   l2ChainIds: Array<ChainId>,
   l1TokenList: TokenList
 ): Promise<TokenList> {
-  validateChains(l2ChainIds)
   const multiChainedTokens: TokenInfo[] = []
   const chainIdToMappingsMap = await generateTokenMappings(
     l2ChainIds,
@@ -66,7 +66,7 @@ export async function buildList(
         })
       )
 
-      // build the TokenInfo objects with bridgeInfo extension (omitting the TokenInfo's chain from the completeExtensions built above) and add them to multiChainedTokens
+      // build the TokenInfo objects with bridgeInfo extension
       l2ChainIds.concat([ChainId.MAINNET]).forEach((chainId) => {
         if (
           chainId === ChainId.MAINNET ||
@@ -141,7 +141,6 @@ function getMappingProvider(chainId: ChainId, l1TokenList: TokenList) {
   }
 }
 
-// returns the mappings for chainIds in the same order as the chainIds list it recieved
 async function generateTokenMappings(
   chainIds: ChainId[],
   l1TokenList: TokenList
@@ -151,8 +150,7 @@ async function generateTokenMappings(
   } = {}
 
   for (const chainId of chainIds) {
-    // don't have mapping provider for CELO, just use manual entry for now
-    if (chainId !== ChainId.CELO) {
+    if (SUPPORTED_L2_CHAINS.includes(chainId)) {
       chainIdToMappingsMap[chainId] = await getMappingProvider(
         chainId,
         l1TokenList
@@ -176,8 +174,9 @@ async function getChildTokenDetails(
 }> {
   const existingMapping: undefined | string =
     l1Token?.extensions?.bridgeInfo?.[chainId]?.tokenAddress
-  // only use the externally fetched mappings if manual entry doesnt exist for the token/chain mapping
-  if (chainId !== ChainId.CELO && existingMapping === undefined) {
+  // use the externally fetched mappings if manual entry doesnt exist for the token/chain mapping
+  // and the given L2 chain is supported for fetching mappings
+  if (SUPPORTED_L2_CHAINS.includes(chainId) && existingMapping === undefined) {
     const childToken =
       chainIdToMappingsMap[chainId][l1Token.address.toLowerCase()]
 
