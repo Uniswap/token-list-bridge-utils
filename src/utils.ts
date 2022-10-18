@@ -108,8 +108,6 @@ export function getRpcUrl(chainId: ChainId): string {
       return 'https://polygon-rpc.com/'
     case ChainId.POLYGON_MUMBAI:
       return 'https://rpc-endpoints.superfluid.dev/mumbai'
-    case ChainId.CELO:
-      return 'https://forno.celo.org'
     default:
   }
   throw new Error('Unsupported ChainId')
