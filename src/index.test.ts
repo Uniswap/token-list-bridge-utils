@@ -20,7 +20,7 @@ jest.setTimeout(15000)
 describe(chainifyTokenList, () => {
   it('outputs Optimism list correctly', async () => {
     const tokenList = await chainifyTokenList(
-      ChainId.OPTIMISM,
+      [ChainId.OPTIMISM],
       sampleL1TokenList
     )
 
@@ -40,7 +40,7 @@ describe(chainifyTokenList, () => {
 
   it('outputs arbitrum list correctly', async () => {
     const tokenList = await chainifyTokenList(
-      ChainId.ARBITRUM_ONE,
+      [ChainId.ARBITRUM_ONE],
       sampleL1TokenList
     )
 
@@ -64,7 +64,7 @@ describe(chainifyTokenList, () => {
 
   it('outputs polygon list correctly', async () => {
     const tokenList = await chainifyTokenList(
-      ChainId.POLYGON,
+      [ChainId.POLYGON],
       sampleL1TokenList
     )
 
