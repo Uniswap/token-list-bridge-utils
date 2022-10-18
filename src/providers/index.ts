@@ -20,7 +20,7 @@ import {
 
 const web3 = new Web3()
 
-// chains we support fetching mappings for (can be different than passed in l2ChainIds arg)
+// chains we support fetching mappings for (can be different than the l2ChainIds arg for buildList)
 const SUPPORTED_L2_CHAINS = [
   ChainId.ARBITRUM_ONE,
   ChainId.POLYGON,
