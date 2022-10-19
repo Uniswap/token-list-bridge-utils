@@ -18,39 +18,33 @@ export async function chainify(
   l1TokenListOrPathOrUrl: TokenListOrFetchableTokenList
 ): Promise<TokenList> {
   const l1TokenList = await getTokenList(l1TokenListOrPathOrUrl)
-
-  const optimisimed = await chainifyTokenList(
-    ChainId.OPTIMISM,
-    l1TokenListOrPathOrUrl
-  )
-  const polygoned = await chainifyTokenList(
+  const l2Chains = [
     ChainId.POLYGON,
-    l1TokenListOrPathOrUrl
-  )
-  const arbified = await chainifyTokenList(
     ChainId.ARBITRUM_ONE,
-    l1TokenListOrPathOrUrl
-  )
+    ChainId.OPTIMISM,
+    ChainId.CELO,
+  ]
 
+  const chainified = await chainifyTokenList(l2Chains, l1TokenListOrPathOrUrl)
   return mergeTokenLists(
     l1TokenList, // providing l1 first to make sure duplicated tokens resolve to this list
-    mergeTokenLists(mergeTokenLists(arbified, optimisimed), polygoned)
+    chainified
   )
 }
 
 /**
  * Given a network and a TokenList, returns the TokenList with `extensions` filled.
- * @param chainId chainId to operate on
+ * @param l2ChainIds layer 2 chainIds to operate on
  * @param l1TokenListOrPathOrUrl either an L1 TokenList object or a path/url to a TokenList
  * @returns L1 TokenList with `extensions` filled for the given network
  */
 export async function chainifyTokenList(
-  chainId: ChainId,
+  l2ChainIds: Array<ChainId>,
   l1TokenListOrPathOrUrl: TokenListOrFetchableTokenList
 ): Promise<TokenList> {
   try {
     const l1TokenList = await getTokenList(l1TokenListOrPathOrUrl)
-    const tokenList = await buildList(chainId, l1TokenList)
+    const tokenList = await buildList(l2ChainIds, l1TokenList)
     return verifyExtensions(tokenList)
   } catch (e) {
     throw new Error(`An error occured: ${e}`)
