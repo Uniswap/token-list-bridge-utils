@@ -174,7 +174,7 @@ async function getChildTokenDetails(
 }> {
   const existingMapping: undefined | string =
     l1Token?.extensions?.bridgeInfo?.[chainId]?.tokenAddress
-  // use the externally fetched mappings if manual entry doesnt exist for the token/chain mapping
+  // use the externally fetched mappings if manual entry doesn't exist for the token/chain mapping
   // and the given L2 chain is supported for fetching mappings
   if (SUPPORTED_L2_CHAINS.includes(chainId) && existingMapping === undefined) {
     const childToken =
@@ -196,15 +196,7 @@ async function getChildTokenDetails(
     }
   }
   return {
-    childTokenValid: existingMapping ? true : false,
+    childTokenValid: !!existingMapping,
     childTokenAddress: existingMapping,
   }
-}
-
-function validateChains(l2ChainIds: ChainId[]) {
-  l2ChainIds.forEach((chainId) => {
-    if (!SUPPORTED_L2_CHAINS.includes(chainId)) {
-      throw new Error(`Chain ${chainId} not supported.`)
-    }
-  })
 }
