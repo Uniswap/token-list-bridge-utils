@@ -182,12 +182,11 @@ async function getChildTokenDetails(
 
     const childTokenAddress = childToken
       ? ethers.utils.getAddress(
-          typeof childToken === 'object' ? childToken.child_token : childToken
+          typeof childToken === 'object' ? childToken.childToken : childToken
         )
       : undefined
     const childTokenValid = Boolean(
       childTokenAddress &&
-        (typeof childToken === 'object' ? !childToken.deleted : true) &&
         (await hasExistingTokenContract(childTokenAddress, chainId))
     )
     return {
