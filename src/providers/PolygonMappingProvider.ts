@@ -2,8 +2,9 @@ import axios from 'axios'
 import { MappingProvider } from './MappingProvider'
 import { PolygonMappedTokenData } from '../constants/types'
 
-const url = 'https://tokenmapper.api.matic.today/api/v1/mapping?'
-const params = 'map_type=[%22POS%22]&chain_id=137&limit=200&offset='
+// called from https://mapper.polygon.technology
+const url = 'https://open-api.polygon.technology/api/v1/info/all-mappings'
+const access_token = '504afd90-3228-4df9-9d88-9b4d70646101'
 
 /**
  * The Polygon team manually maintains the mapping via user submissions at
@@ -13,22 +14,15 @@ const params = 'map_type=[%22POS%22]&chain_id=137&limit=200&offset='
  */
 export class PolygonMappingProvider implements MappingProvider {
   async provide(): Promise<PolygonMappedTokenData> {
-    let offset = 0
+    const response = await axios.get(url, {
+      headers: { 'x-access-token': access_token },
+    })
     const tokens: PolygonMappedTokenData = {}
-    while (true) {
-      const response = await axios.get(`${url}${params}${offset}`)
 
-      if (response.data.message === 'success') {
-        for (const token of response.data.data.mapping) {
-          tokens[token.root_token.toLowerCase()] = token
-        }
-
-        if (response.data.data.has_next_page === true) {
-          offset += 200
-          continue
-        }
+    for (const token of response.data) {
+      if (token.isPos) {
+        tokens[token.rootToken.toLowerCase()] = token
       }
-      break
     }
     return tokens
   }
