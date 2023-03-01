@@ -12,4 +12,5 @@ export enum ChainId {
   POLYGON_MUMBAI = 80001,
 
   CELO = 42220,
+  BNB = 56,
 }
