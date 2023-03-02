@@ -29,3 +29,11 @@ export const DAI_POLYGON = new Token(
   'DAI',
   'Dai Stablecoin'
 )
+
+export const DAI_BNB = new Token(
+  ChainId.BNB,
+  '0x1AF3F329e8BE154074D8769D1FFa4eE058B1DBc3',
+  18,
+  'DAI',
+  'Dai Stablecoin'
+)

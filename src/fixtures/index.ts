@@ -4,6 +4,7 @@ import { ChainId } from '../constants/chainId'
 import {
   DAI,
   DAI_ARBITRUM_ONE,
+  DAI_BNB,
   DAI_OPTIMISM,
   DAI_POLYGON,
 } from '../constants/tokens'
@@ -21,6 +22,9 @@ export const Tokens: Partial<Record<ChainId, Record<string, TokenInfo>>> = {
   },
   [ChainId.OPTIMISM]: {
     DAI: tokenToTokenInfo(DAI_OPTIMISM),
+  },
+  [ChainId.BNB]: {
+    DAI: tokenToTokenInfo(DAI_BNB),
   },
 }
 
@@ -88,6 +92,33 @@ export const polygonedSampleTokenList = {
         bridgeInfo: {
           [ChainId.POLYGON]: {
             tokenAddress: DAI_POLYGON.address,
+          },
+        },
+      },
+    } as unknown as TokenInfo,
+  ].sort(compareTokenInfos),
+}
+
+export const bnbedSampleTokenList = {
+  ...sampleL1TokenList,
+  name: 'BNBed Sample',
+  tokens: [
+    {
+      ...Tokens[ChainId.BNB]!.DAI,
+      extensions: {
+        bridgeInfo: {
+          [ChainId.MAINNET]: {
+            tokenAddress: DAI.address,
+          },
+        },
+      },
+    } as unknown as TokenInfo,
+    {
+      ...(Tokens[ChainId.MAINNET]!.DAI as unknown as TokenInfo),
+      extensions: {
+        bridgeInfo: {
+          [ChainId.BNB]: {
+            tokenAddress: DAI_BNB.address,
           },
         },
       },

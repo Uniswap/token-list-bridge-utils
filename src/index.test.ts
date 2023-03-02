@@ -4,6 +4,7 @@ import { ChainId } from './constants/chainId'
 import {
   DAI,
   DAI_ARBITRUM_ONE,
+  DAI_BNB,
   DAI_OPTIMISM,
   DAI_POLYGON,
 } from './constants/tokens'
@@ -11,6 +12,7 @@ import {
   arbedSampleTokenList,
   optimizedSampleTokenList,
   polygonedSampleTokenList,
+  bnbedSampleTokenList,
   sampleL1TokenList,
   Tokens,
 } from './fixtures'
@@ -81,6 +83,19 @@ describe(chainifyTokenList, () => {
       ])
     )
   })
+})
+
+it('outputs bnb list correctly', async () => {
+  const tokenList = await chainifyTokenList([ChainId.BNB], sampleL1TokenList)
+  console.log('heeeeeeee', JSON.stringify(tokenList.tokens, null, 2))
+  expect(tokenList).toBeDefined()
+  expect(tokenList?.version).toEqual(bnbedSampleTokenList.version)
+  expect(
+    tokenList?.tokens.map((t) => [t.address, t.chainId, t.extensions])
+  ).toEqual(
+    // ignores other metadata
+    bnbedSampleTokenList.tokens.map((t) => [t.address, t.chainId, t.extensions])
+  )
 })
 
 describe(mergeTokenLists, () => {
@@ -186,6 +201,9 @@ describe(chainify, () => {
         ...Tokens[ChainId.MAINNET]!.DAI,
         extensions: {
           bridgeInfo: {
+            [ChainId.BNB]: {
+              tokenAddress: DAI_BNB.address,
+            },
             [ChainId.OPTIMISM]: {
               tokenAddress: DAI_OPTIMISM.address,
             },
@@ -203,6 +221,16 @@ describe(chainify, () => {
       {
         ...Tokens[ChainId.OPTIMISM]!.DAI,
         name: 'Dai Stablecoin',
+        extensions: {
+          bridgeInfo: {
+            [ChainId.MAINNET]: {
+              tokenAddress: DAI.address,
+            },
+          },
+        },
+      },
+      {
+        ...Tokens[ChainId.BNB]!.DAI,
         extensions: {
           bridgeInfo: {
             [ChainId.MAINNET]: {

@@ -3,6 +3,7 @@ import { Contract } from 'web3-eth-contract'
 import { ArbitrumMappingProvider } from './ArbitrumMappingProvider'
 import { OptimismMappingProvider } from './OptimismMappingProvider'
 import { PolygonMappingProvider } from './PolygonMappingProvider'
+import { BnbMappingProvider } from './BnbMappingProvider'
 import { TokenInfo, TokenList } from '@uniswap/token-lists'
 import { ethers } from 'ethers'
 import {
@@ -25,6 +26,7 @@ const SUPPORTED_L2_CHAINS = [
   ChainId.ARBITRUM_ONE,
   ChainId.POLYGON,
   ChainId.OPTIMISM,
+  ChainId.BNB,
 ]
 
 export async function buildList(
@@ -136,6 +138,8 @@ function getMappingProvider(chainId: ChainId, l1TokenList: TokenList) {
       return new OptimismMappingProvider()
     case ChainId.POLYGON:
       return new PolygonMappingProvider()
+    case ChainId.BNB:
+      return new BnbMappingProvider()
     default:
       throw new Error(`Chain ${chainId} not supported for fetching mappings.`)
   }

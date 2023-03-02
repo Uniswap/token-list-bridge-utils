@@ -108,6 +108,8 @@ export function getRpcUrl(chainId: ChainId): string {
       return 'https://polygon-rpc.com/'
     case ChainId.POLYGON_MUMBAI:
       return 'https://rpc-endpoints.superfluid.dev/mumbai'
+    case ChainId.BNB:
+      return 'https://bsc-dataseed1.binance.org'
     default:
   }
   throw new Error('Unsupported ChainId')
