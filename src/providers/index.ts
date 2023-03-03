@@ -207,9 +207,10 @@ async function getChildTokenDetails(
         (await hasExistingTokenContract(childTokenAddress, chainId))
     )
     const decimals =
-      chainId === ChainId.BNB
+      childToken && chainId === ChainId.BNB
         ? (childToken as BnbMappedToken).decimals
         : undefined
+
     return {
       childTokenValid: childTokenValid,
       childTokenAddress: childTokenAddress,
