@@ -15,6 +15,8 @@ import {
   bnbedSampleTokenList,
   sampleL1TokenList,
   Tokens,
+  sampleL1TokenList_2,
+  bnbedSampleTokenList_2,
 } from './fixtures'
 
 jest.setTimeout(15000)
@@ -87,7 +89,6 @@ describe(chainifyTokenList, () => {
 
 it('outputs bnb list correctly', async () => {
   const tokenList = await chainifyTokenList([ChainId.BNB], sampleL1TokenList)
-  console.log('heeeeeeee', JSON.stringify(tokenList.tokens, null, 2))
   expect(tokenList).toBeDefined()
   expect(tokenList?.version).toEqual(bnbedSampleTokenList.version)
   expect(
@@ -95,6 +96,22 @@ it('outputs bnb list correctly', async () => {
   ).toEqual(
     // ignores other metadata
     bnbedSampleTokenList.tokens.map((t) => [t.address, t.chainId, t.extensions])
+  )
+})
+
+it('outputs bnb list correctly with different decimals', async () => {
+  const tokenList = await chainifyTokenList([ChainId.BNB], sampleL1TokenList_2)
+  expect(tokenList).toBeDefined()
+  expect(tokenList?.version).toEqual(bnbedSampleTokenList_2.version)
+  expect(
+    tokenList?.tokens.map((t) => [t.address, t.chainId, t.extensions])
+  ).toEqual(
+    // ignores other metadata
+    bnbedSampleTokenList_2.tokens.map((t) => [
+      t.address,
+      t.chainId,
+      t.extensions,
+    ])
   )
 })
 

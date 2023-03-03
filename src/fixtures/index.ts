@@ -7,12 +7,15 @@ import {
   DAI_BNB,
   DAI_OPTIMISM,
   DAI_POLYGON,
+  USDT,
+  USDT_BNB,
 } from '../constants/tokens'
 import { compareTokenInfos } from '../utils'
 
 export const Tokens: Partial<Record<ChainId, Record<string, TokenInfo>>> = {
   [ChainId.MAINNET]: {
     DAI: tokenToTokenInfo(DAI),
+    USDT: tokenToTokenInfo(USDT),
   },
   [ChainId.ARBITRUM_ONE]: {
     DAI: tokenToTokenInfo(DAI_ARBITRUM_ONE),
@@ -25,6 +28,7 @@ export const Tokens: Partial<Record<ChainId, Record<string, TokenInfo>>> = {
   },
   [ChainId.BNB]: {
     DAI: tokenToTokenInfo(DAI_BNB),
+    USDT: tokenToTokenInfo(USDT_BNB),
   },
 }
 
@@ -37,6 +41,17 @@ export const sampleL1TokenList: TokenList = {
     patch: 0,
   },
   tokens: [Tokens[ChainId.MAINNET]!.DAI],
+}
+
+export const sampleL1TokenList_2: TokenList = {
+  name: 'Sample_2',
+  timestamp: new Date(1646146610).toISOString(),
+  version: {
+    major: 1,
+    minor: 0,
+    patch: 0,
+  },
+  tokens: [Tokens[ChainId.MAINNET]!.USDT],
 }
 
 export const arbBridgeL2Address = '0x467194771dae2967aef3ecbedd3bf9a310c76c65'
@@ -119,6 +134,33 @@ export const bnbedSampleTokenList = {
         bridgeInfo: {
           [ChainId.BNB]: {
             tokenAddress: DAI_BNB.address,
+          },
+        },
+      },
+    } as unknown as TokenInfo,
+  ].sort(compareTokenInfos),
+}
+
+export const bnbedSampleTokenList_2 = {
+  ...sampleL1TokenList_2,
+  name: 'BNBed Sample_2',
+  tokens: [
+    {
+      ...Tokens[ChainId.BNB]!.USDT,
+      extensions: {
+        bridgeInfo: {
+          [ChainId.MAINNET]: {
+            tokenAddress: USDT.address,
+          },
+        },
+      },
+    } as unknown as TokenInfo,
+    {
+      ...(Tokens[ChainId.MAINNET]!.USDT as unknown as TokenInfo),
+      extensions: {
+        bridgeInfo: {
+          [ChainId.BNB]: {
+            tokenAddress: USDT_BNB.address,
           },
         },
       },

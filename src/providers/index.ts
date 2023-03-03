@@ -17,6 +17,8 @@ import Web3 from 'web3'
 import {
   GenericMappedTokenData,
   PolygonMappedTokenData,
+  BnbMappedTokenData,
+  BnbMappedToken,
 } from '../constants/types'
 
 const web3 = new Web3()
@@ -44,6 +46,7 @@ export async function buildList(
         [key: number]: {
           childTokenValid: boolean
           childTokenAddress: string | undefined
+          decimals?: number
         }
       } = {}
       const l2MappingExtension = {
@@ -88,6 +91,9 @@ export async function buildList(
                 } as unknown as TokenInfo)
               : ({
                   ...l1Token,
+                  decimals:
+                    chainIdToChildTokenDetailsMap[chainId].decimals ??
+                    l1Token.decimals,
                   chainId: chainId,
                   address:
                     chainIdToChildTokenDetailsMap[chainId].childTokenAddress,
@@ -150,7 +156,10 @@ async function generateTokenMappings(
   l1TokenList: TokenList
 ) {
   const chainIdToMappingsMap: {
-    [key: number]: PolygonMappedTokenData | GenericMappedTokenData
+    [key: number]:
+      | PolygonMappedTokenData
+      | GenericMappedTokenData
+      | BnbMappedTokenData
   } = {}
 
   for (const chainId of chainIds) {
@@ -170,11 +179,15 @@ async function getChildTokenDetails(
   l1Token: TokenInfo,
   chainId: ChainId,
   chainIdToMappingsMap: {
-    [key: number]: PolygonMappedTokenData | GenericMappedTokenData
+    [key: number]:
+      | PolygonMappedTokenData
+      | GenericMappedTokenData
+      | BnbMappedTokenData
   }
 ): Promise<{
   childTokenValid: boolean
   childTokenAddress: string | undefined
+  decimals?: number | undefined
 }> {
   const existingMapping: undefined | string =
     l1Token?.extensions?.bridgeInfo?.[chainId]?.tokenAddress
@@ -193,9 +206,14 @@ async function getChildTokenDetails(
       childTokenAddress &&
         (await hasExistingTokenContract(childTokenAddress, chainId))
     )
+    const decimals =
+      chainId === ChainId.BNB
+        ? (childToken as BnbMappedToken).decimals
+        : undefined
     return {
       childTokenValid: childTokenValid,
       childTokenAddress: childTokenAddress,
+      decimals: decimals,
     }
   }
   return {
