@@ -4,6 +4,7 @@ import { ChainId } from './constants/chainId'
 import {
   DAI,
   DAI_ARBITRUM_ONE,
+  DAI_AVALANCHE,
   DAI_BNB,
   DAI_OPTIMISM,
   DAI_POLYGON,
@@ -17,6 +18,7 @@ import {
   Tokens,
   sampleL1TokenList_2,
   bnbedSampleTokenList_2,
+  avalanchedSampleTokenList,
 } from './fixtures'
 
 jest.setTimeout(15000)
@@ -85,6 +87,25 @@ describe(chainifyTokenList, () => {
       ])
     )
   })
+})
+
+it('outputs avalanche list correctly', async () => {
+  const tokenList = await chainifyTokenList(
+    [ChainId.AVALANCHE],
+    sampleL1TokenList
+  )
+  expect(tokenList).toBeDefined()
+  expect(tokenList?.version).toEqual(avalanchedSampleTokenList.version)
+  expect(
+    tokenList?.tokens.map((t) => [t.address, t.chainId, t.extensions])
+  ).toEqual(
+    // ignores other metadata
+    avalanchedSampleTokenList.tokens.map((t) => [
+      t.address,
+      t.chainId,
+      t.extensions,
+    ])
+  )
 })
 
 it('outputs bnb list correctly', async () => {
@@ -221,6 +242,9 @@ describe(chainify, () => {
             [ChainId.BNB]: {
               tokenAddress: DAI_BNB.address,
             },
+            [ChainId.AVALANCHE]: {
+              tokenAddress: DAI_AVALANCHE.address,
+            },
             [ChainId.OPTIMISM]: {
               tokenAddress: DAI_OPTIMISM.address,
             },
@@ -278,6 +302,18 @@ describe(chainify, () => {
           },
         },
         name: 'Dai Stablecoin',
+      },
+      {
+        ...Tokens[ChainId.AVALANCHE]!.DAI,
+        name: 'Dai Stablecoin',
+        symbol: 'DAI',
+        extensions: {
+          bridgeInfo: {
+            [ChainId.MAINNET]: {
+              tokenAddress: DAI.address,
+            },
+          },
+        },
       },
     ])
   })

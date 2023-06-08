@@ -118,6 +118,33 @@ export const polygonedSampleTokenList = {
   ].sort(compareTokenInfos),
 }
 
+export const avalanchedSampleTokenList = {
+  ...sampleL1TokenList,
+  name: 'Avalanched Sample',
+  tokens: [
+    {
+      ...Tokens[ChainId.AVALANCHE]!.DAI,
+      extensions: {
+        bridgeInfo: {
+          [ChainId.MAINNET]: {
+            tokenAddress: DAI.address,
+          },
+        },
+      },
+    } as unknown as TokenInfo,
+    {
+      ...(Tokens[ChainId.MAINNET]!.DAI as unknown as TokenInfo),
+      extensions: {
+        bridgeInfo: {
+          [ChainId.AVALANCHE]: {
+            tokenAddress: DAI_AVALANCHE.address,
+          },
+        },
+      },
+    } as unknown as TokenInfo,
+  ].sort(compareTokenInfos),
+}
+
 export const bnbedSampleTokenList = {
   ...sampleL1TokenList,
   name: 'BNBed Sample',
