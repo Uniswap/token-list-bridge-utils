@@ -17,8 +17,8 @@ import Web3 from 'web3'
 import {
   GenericMappedTokenData,
   PolygonMappedTokenData,
-  BnbMappedTokenData,
-  BnbMappedToken,
+  MappedTokenData,
+  MappedToken,
 } from '../constants/types'
 import { AvalancheMappingProvider } from './AvalancheMappingProvider'
 
@@ -163,7 +163,7 @@ async function generateTokenMappings(
     [key: number]:
       | PolygonMappedTokenData
       | GenericMappedTokenData
-      | BnbMappedTokenData
+      | MappedTokenData
   } = {}
 
   for (const chainId of chainIds) {
@@ -186,7 +186,7 @@ async function getChildTokenDetails(
     [key: number]:
       | PolygonMappedTokenData
       | GenericMappedTokenData
-      | BnbMappedTokenData
+      | MappedTokenData
   }
 ): Promise<{
   childTokenValid: boolean
@@ -212,7 +212,7 @@ async function getChildTokenDetails(
     )
     const decimals =
       childToken && chainId === ChainId.BNB
-        ? (childToken as BnbMappedToken).decimals
+        ? (childToken as MappedToken).decimals
         : undefined
 
     return {
