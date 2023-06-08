@@ -25,7 +25,7 @@ import { AvalancheMappingProvider } from './AvalancheMappingProvider'
 const web3 = new Web3()
 
 // chains we support fetching mappings for (can be different than the l2ChainIds arg for buildList)
-const SUPPORTED_CHAINS = [
+const CHAINS_WITH_MAPPING_PROVIDERS = [
   ChainId.ARBITRUM_ONE,
   ChainId.POLYGON,
   ChainId.OPTIMISM,
@@ -167,7 +167,7 @@ async function generateTokenMappings(
   } = {}
 
   for (const chainId of chainIds) {
-    if (SUPPORTED_CHAINS.includes(chainId)) {
+    if (CHAINS_WITH_MAPPING_PROVIDERS.includes(chainId)) {
       chainIdToMappingsMap[chainId] = await getMappingProvider(
         chainId,
         l1TokenList
@@ -197,7 +197,10 @@ async function getChildTokenDetails(
     l1Token?.extensions?.bridgeInfo?.[chainId]?.tokenAddress
   // use the externally fetched mappings if manual entry doesn't exist for the token/chain mapping
   // and the given chain is supported for fetching mappings
-  if (SUPPORTED_CHAINS.includes(chainId) && existingMapping === undefined) {
+  if (
+    CHAINS_WITH_MAPPING_PROVIDERS.includes(chainId) &&
+    existingMapping === undefined
+  ) {
     const childToken =
       chainIdToMappingsMap[chainId][l1Token.address.toLowerCase()]
 
@@ -211,7 +214,7 @@ async function getChildTokenDetails(
         (await hasExistingTokenContract(childTokenAddress, chainId))
     )
     const decimals =
-      childToken && chainId === ChainId.BNB
+      childToken && (chainId === ChainId.BNB || chainId === ChainId.AVALANCHE)
         ? (childToken as MappedToken).decimals
         : undefined
 
