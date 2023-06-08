@@ -38,6 +38,14 @@ export const DAI_BNB = new Token(
   'Dai Stablecoin'
 )
 
+export const DAI_AVALANCHE = new Token(
+  ChainId.AVALANCHE,
+  '0xd586E7F844cEa2F87f50152665BCbc2C279D8d70',
+  18,
+  'DAI.e Token',
+  'DAI.e'
+)
+
 export const USDT = new Token(
   ChainId.MAINNET,
   '0xdAC17F958D2ee523a2206206994597C13D831ec7',

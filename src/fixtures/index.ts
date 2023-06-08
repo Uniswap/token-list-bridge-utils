@@ -5,6 +5,7 @@ import {
   DAI,
   DAI_ARBITRUM_ONE,
   DAI_BNB,
+  DAI_AVALANCHE,
   DAI_OPTIMISM,
   DAI_POLYGON,
   USDT,
@@ -29,6 +30,9 @@ export const Tokens: Partial<Record<ChainId, Record<string, TokenInfo>>> = {
   [ChainId.BNB]: {
     DAI: tokenToTokenInfo(DAI_BNB),
     USDT: tokenToTokenInfo(USDT_BNB),
+  },
+  [ChainId.AVALANCHE]: {
+    DAI: tokenToTokenInfo(DAI_AVALANCHE),
   },
 }
 
@@ -107,6 +111,33 @@ export const polygonedSampleTokenList = {
         bridgeInfo: {
           [ChainId.POLYGON]: {
             tokenAddress: DAI_POLYGON.address,
+          },
+        },
+      },
+    } as unknown as TokenInfo,
+  ].sort(compareTokenInfos),
+}
+
+export const avalanchedSampleTokenList = {
+  ...sampleL1TokenList,
+  name: 'Avalanched Sample',
+  tokens: [
+    {
+      ...Tokens[ChainId.AVALANCHE]!.DAI,
+      extensions: {
+        bridgeInfo: {
+          [ChainId.MAINNET]: {
+            tokenAddress: DAI.address,
+          },
+        },
+      },
+    } as unknown as TokenInfo,
+    {
+      ...(Tokens[ChainId.MAINNET]!.DAI as unknown as TokenInfo),
+      extensions: {
+        bridgeInfo: {
+          [ChainId.AVALANCHE]: {
+            tokenAddress: DAI_AVALANCHE.address,
           },
         },
       },

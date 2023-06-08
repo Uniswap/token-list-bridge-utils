@@ -13,4 +13,6 @@ export enum ChainId {
 
   CELO = 42220,
   BNB = 56,
+
+  AVALANCHE = 43114,
 }
