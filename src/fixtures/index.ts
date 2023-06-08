@@ -5,6 +5,7 @@ import {
   DAI,
   DAI_ARBITRUM_ONE,
   DAI_BNB,
+  DAI_AVALANCHE,
   DAI_OPTIMISM,
   DAI_POLYGON,
   USDT,
@@ -29,6 +30,9 @@ export const Tokens: Partial<Record<ChainId, Record<string, TokenInfo>>> = {
   [ChainId.BNB]: {
     DAI: tokenToTokenInfo(DAI_BNB),
     USDT: tokenToTokenInfo(USDT_BNB),
+  },
+  [ChainId.AVALANCHE]: {
+    DAI: tokenToTokenInfo(DAI_AVALANCHE),
   },
 }
 

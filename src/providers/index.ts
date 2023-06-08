@@ -20,15 +20,17 @@ import {
   BnbMappedTokenData,
   BnbMappedToken,
 } from '../constants/types'
+import { AvalancheMappingProvider } from './AvalancheMappingProvider'
 
 const web3 = new Web3()
 
 // chains we support fetching mappings for (can be different than the l2ChainIds arg for buildList)
-const SUPPORTED_L2_CHAINS = [
+const SUPPORTED_CHAINS = [
   ChainId.ARBITRUM_ONE,
   ChainId.POLYGON,
   ChainId.OPTIMISM,
   ChainId.BNB,
+  ChainId.AVALANCHE,
 ]
 
 export async function buildList(
@@ -146,6 +148,8 @@ function getMappingProvider(chainId: ChainId, l1TokenList: TokenList) {
       return new PolygonMappingProvider()
     case ChainId.BNB:
       return new BnbMappingProvider()
+    case ChainId.AVALANCHE:
+      return new AvalancheMappingProvider()
     default:
       throw new Error(`Chain ${chainId} not supported for fetching mappings.`)
   }
@@ -163,7 +167,7 @@ async function generateTokenMappings(
   } = {}
 
   for (const chainId of chainIds) {
-    if (SUPPORTED_L2_CHAINS.includes(chainId)) {
+    if (SUPPORTED_CHAINS.includes(chainId)) {
       chainIdToMappingsMap[chainId] = await getMappingProvider(
         chainId,
         l1TokenList
@@ -192,8 +196,8 @@ async function getChildTokenDetails(
   const existingMapping: undefined | string =
     l1Token?.extensions?.bridgeInfo?.[chainId]?.tokenAddress
   // use the externally fetched mappings if manual entry doesn't exist for the token/chain mapping
-  // and the given L2 chain is supported for fetching mappings
-  if (SUPPORTED_L2_CHAINS.includes(chainId) && existingMapping === undefined) {
+  // and the given chain is supported for fetching mappings
+  if (SUPPORTED_CHAINS.includes(chainId) && existingMapping === undefined) {
     const childToken =
       chainIdToMappingsMap[chainId][l1Token.address.toLowerCase()]
 

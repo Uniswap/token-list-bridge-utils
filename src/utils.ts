@@ -110,6 +110,8 @@ export function getRpcUrl(chainId: ChainId): string {
       return 'https://rpc-endpoints.superfluid.dev/mumbai'
     case ChainId.BNB:
       return 'https://bsc-dataseed1.binance.org'
+    case ChainId.AVALANCHE:
+      return 'https://api.avax.network/ext/bc/C/rpc' 
     default:
   }
   throw new Error('Unsupported ChainId')
