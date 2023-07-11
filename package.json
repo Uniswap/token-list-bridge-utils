@@ -57,7 +57,7 @@
     }
   ],
   "typings": "dist/index.d.ts",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "dependencies": {
     "@arbitrum/sdk": "^1.1.4",
     "@uniswap/sdk-core": "^3.0.1",
