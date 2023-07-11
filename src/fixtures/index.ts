@@ -10,6 +10,9 @@ import {
   DAI_POLYGON,
   USDT,
   USDT_BNB,
+  COINBASE_WRAPPED_STAKED_ETH,
+  COINBASE_WRAPPED_STAKED_ETH_BASE_GOERLI,
+  COINBASE_WRAPPED_STAKED_ETH_ARBITRUM_ONE,
 } from '../constants/tokens'
 import { compareTokenInfos } from '../utils'
 
@@ -17,9 +20,13 @@ export const Tokens: Partial<Record<ChainId, Record<string, TokenInfo>>> = {
   [ChainId.MAINNET]: {
     DAI: tokenToTokenInfo(DAI),
     USDT: tokenToTokenInfo(USDT),
+    COINBASE_WRAPPED_STAKED_ETH: tokenToTokenInfo(COINBASE_WRAPPED_STAKED_ETH),
   },
   [ChainId.ARBITRUM_ONE]: {
     DAI: tokenToTokenInfo(DAI_ARBITRUM_ONE),
+    COINBASE_WRAPPED_STAKED_ETH: tokenToTokenInfo(
+      COINBASE_WRAPPED_STAKED_ETH_ARBITRUM_ONE
+    ),
   },
   [ChainId.POLYGON]: {
     DAI: tokenToTokenInfo(DAI_POLYGON),
@@ -33,6 +40,11 @@ export const Tokens: Partial<Record<ChainId, Record<string, TokenInfo>>> = {
   },
   [ChainId.AVALANCHE]: {
     DAI: tokenToTokenInfo(DAI_AVALANCHE),
+  },
+  [ChainId.BASE_GOERLI]: {
+    COINBASE_WRAPPED_STAKED_ETH: tokenToTokenInfo(
+      COINBASE_WRAPPED_STAKED_ETH_BASE_GOERLI
+    ),
   },
 }
 
@@ -56,6 +68,17 @@ export const sampleL1TokenList_2: TokenList = {
     patch: 0,
   },
   tokens: [Tokens[ChainId.MAINNET]!.USDT],
+}
+
+export const sampleL1TokenList_3: TokenList = {
+  name: 'Sample_3',
+  timestamp: new Date(1646146610).toISOString(),
+  version: {
+    major: 1,
+    minor: 0,
+    patch: 0,
+  },
+  tokens: [Tokens[ChainId.MAINNET]!.COINBASE_WRAPPED_STAKED_ETH],
 }
 
 export const arbBridgeL2Address = '0x467194771dae2967aef3ecbedd3bf9a310c76c65'
@@ -192,6 +215,34 @@ export const bnbedSampleTokenList_2 = {
         bridgeInfo: {
           [ChainId.BNB]: {
             tokenAddress: USDT_BNB.address,
+          },
+        },
+      },
+    } as unknown as TokenInfo,
+  ].sort(compareTokenInfos),
+}
+
+export const baseGoerliSampleTokenList_3 = {
+  ...sampleL1TokenList_3,
+  name: 'Base Goerli Sample_3',
+  tokens: [
+    {
+      ...Tokens[ChainId.BASE_GOERLI]!.COINBASE_WRAPPED_STAKED_ETH,
+      extensions: {
+        bridgeInfo: {
+          [ChainId.MAINNET]: {
+            tokenAddress: COINBASE_WRAPPED_STAKED_ETH.address,
+          },
+        },
+      },
+    } as unknown as TokenInfo,
+    {
+      ...(Tokens[ChainId.MAINNET]!
+        .COINBASE_WRAPPED_STAKED_ETH as unknown as TokenInfo),
+      extensions: {
+        bridgeInfo: {
+          [ChainId.BASE_GOERLI]: {
+            tokenAddress: COINBASE_WRAPPED_STAKED_ETH_BASE_GOERLI.address,
           },
         },
       },

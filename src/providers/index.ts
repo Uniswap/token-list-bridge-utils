@@ -21,6 +21,7 @@ import {
   MappedToken,
 } from '../constants/types'
 import { AvalancheMappingProvider } from './AvalancheMappingProvider'
+import { BaseGoerliMappingProvider } from './BaseGoerliMappingProvider'
 
 const web3 = new Web3()
 
@@ -31,6 +32,7 @@ const CHAINS_WITH_MAPPING_PROVIDERS = [
   ChainId.OPTIMISM,
   ChainId.BNB,
   ChainId.AVALANCHE,
+  ChainId.BASE_GOERLI,
 ]
 
 export async function buildList(
@@ -150,6 +152,8 @@ function getMappingProvider(chainId: ChainId, l1TokenList: TokenList) {
       return new BnbMappingProvider()
     case ChainId.AVALANCHE:
       return new AvalancheMappingProvider()
+    case ChainId.BASE_GOERLI:
+      return new BaseGoerliMappingProvider()
     default:
       throw new Error(`Chain ${chainId} not supported for fetching mappings.`)
   }
