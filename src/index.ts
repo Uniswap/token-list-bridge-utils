@@ -29,10 +29,18 @@ export async function chainify(
   ]
 
   const chainified = await chainifyTokenList(l2Chains, l1TokenListOrPathOrUrl)
-  return mergeTokenLists(
+  const merged = mergeTokenLists(
     l1TokenList, // providing l1 first to make sure duplicated tokens resolve to this list
     chainified
   )
+
+  const tokenMap = {}
+  if (merged.tokens && merged.tokens.length > 0) {
+    merged.tokens.forEach((token) => {
+      tokenMap[`${token.chainId}_${token.address}`] = token
+    })
+  }
+  return { ...merged, tokenMap }
 }
 
 /**

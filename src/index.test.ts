@@ -255,6 +255,93 @@ describe(mergeTokenLists, () => {
   })
 })
 describe(chainify, () => {
+  it('creates tokenMap correctly in chainify', async () => {
+    const chainified = await chainify(sampleL1TokenList)
+
+    expect(chainified.tokenMap).toEqual({
+      '10_0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1': {
+        ...Tokens[ChainId.OPTIMISM]!.DAI,
+        name: 'Dai Stablecoin',
+        extensions: {
+          bridgeInfo: {
+            [ChainId.MAINNET]: {
+              tokenAddress: DAI.address,
+            },
+          },
+        },
+      },
+      '137_0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063': {
+        ...Tokens[ChainId.POLYGON]!.DAI,
+        extensions: {
+          bridgeInfo: {
+            [ChainId.MAINNET]: {
+              tokenAddress: DAI.address,
+            },
+          },
+        },
+      },
+      '1_0x6B175474E89094C44Da98b954EedeAC495271d0F': {
+        ...Tokens[ChainId.MAINNET]!.DAI,
+        extensions: {
+          bridgeInfo: {
+            [ChainId.BNB]: {
+              tokenAddress: DAI_BNB.address,
+            },
+            [ChainId.AVALANCHE]: {
+              tokenAddress: DAI_AVALANCHE.address,
+            },
+            [ChainId.OPTIMISM]: {
+              tokenAddress: DAI_OPTIMISM.address,
+            },
+            [ChainId.POLYGON]: {
+              tokenAddress: DAI_POLYGON.address,
+            },
+            [ChainId.ARBITRUM_ONE]: {
+              tokenAddress: DAI_ARBITRUM_ONE.address,
+              // destBridgeAddress: arbBridgeL2Address,
+              // originBridgeAddress: arbBridgeL1Address,
+            },
+          },
+        },
+      },
+      '42161_0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1': {
+        ...Tokens[ChainId.ARBITRUM_ONE]!.DAI,
+        extensions: {
+          bridgeInfo: {
+            [ChainId.MAINNET]: {
+              tokenAddress: DAI.address,
+              // originBridgeAddress: arbBridgeL2Address,
+              // destBridgeAddress: arbBridgeL1Address,
+            },
+          },
+        },
+        name: 'Dai Stablecoin',
+      },
+      '43114_0xd586E7F844cEa2F87f50152665BCbc2C279D8d70': {
+        ...Tokens[ChainId.AVALANCHE]!.DAI,
+        name: 'Dai Stablecoin',
+        symbol: 'DAI',
+        extensions: {
+          bridgeInfo: {
+            [ChainId.MAINNET]: {
+              tokenAddress: DAI.address,
+            },
+          },
+        },
+      },
+      '56_0x1AF3F329e8BE154074D8769D1FFa4eE058B1DBc3': {
+        ...Tokens[ChainId.BNB]!.DAI,
+        extensions: {
+          bridgeInfo: {
+            [ChainId.MAINNET]: {
+              tokenAddress: DAI.address,
+            },
+          },
+        },
+      },
+    })
+  })
+
   it('provides bridge extensions', async () => {
     const chainified = await chainify(sampleL1TokenList)
 

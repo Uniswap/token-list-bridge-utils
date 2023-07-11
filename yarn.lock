@@ -2361,10 +2361,10 @@
     tiny-invariant "^1.1.0"
     toformat "^2.0.0"
 
-"@uniswap/token-lists@^1.0.0-beta.27":
-  version "1.0.0-beta.27"
-  resolved "https://registry.npmjs.org/@uniswap/token-lists/-/token-lists-1.0.0-beta.27.tgz"
-  integrity sha512-x5hmIniQ9TGqOBCRqfWcmZi/U5kB0qrHMDQ9igs3nMbK0wwmYLraL4owbIwXFGR/co6/lJYJC4K/Gjn4wZY5mQ==
+"@uniswap/token-lists@^1.0.0-beta.33":
+  version "1.0.0-beta.33"
+  resolved "https://registry.yarnpkg.com/@uniswap/token-lists/-/token-lists-1.0.0-beta.33.tgz#966ba96c9ccc8f0e9e09809890b438203f2b1911"
+  integrity sha512-JQkXcpRI3jFG8y3/CGC4TS8NkDgcxXaOQuYW8Qdvd6DcDiIyg2vVYCG9igFEzF0G6UvxgHkBKC7cWCgzZNYvQg==
 
 "@yarn-tool/resolve-package@^1.0.40":
   version "1.0.43"
