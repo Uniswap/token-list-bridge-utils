@@ -2,6 +2,9 @@ import { TokenInfo } from '@uniswap/token-lists'
 import { chainify, chainifyTokenList, mergeTokenLists } from '.'
 import { ChainId } from './constants/chainId'
 import {
+  COINBASE_WRAPPED_STAKED_ETH,
+  COINBASE_WRAPPED_STAKED_ETH_ARBITRUM_ONE,
+  COINBASE_WRAPPED_STAKED_ETH_BASE_GOERLI,
   DAI,
   DAI_ARBITRUM_ONE,
   DAI_AVALANCHE,
@@ -19,6 +22,8 @@ import {
   sampleL1TokenList_2,
   bnbedSampleTokenList_2,
   avalanchedSampleTokenList,
+  sampleL1TokenList_3,
+  baseGoerliSampleTokenList_3,
 } from './fixtures'
 
 jest.setTimeout(15000)
@@ -129,6 +134,25 @@ it('outputs bnb list correctly with different decimals', async () => {
   ).toEqual(
     // ignores other metadata
     bnbedSampleTokenList_2.tokens.map((t) => [
+      t.address,
+      t.chainId,
+      t.extensions,
+    ])
+  )
+})
+
+it('outputs base goerli list correctly', async () => {
+  const tokenList = await chainifyTokenList(
+    [ChainId.BASE_GOERLI],
+    sampleL1TokenList_3
+  )
+  expect(tokenList).toBeDefined()
+  expect(tokenList?.version).toEqual(baseGoerliSampleTokenList_3.version)
+  expect(
+    tokenList?.tokens.map((t) => [t.address, t.chainId, t.extensions])
+  ).toEqual(
+    // ignores other metadata
+    baseGoerliSampleTokenList_3.tokens.map((t) => [
       t.address,
       t.chainId,
       t.extensions,
@@ -398,6 +422,48 @@ describe(chainify, () => {
           bridgeInfo: {
             [ChainId.MAINNET]: {
               tokenAddress: DAI.address,
+            },
+          },
+        },
+      },
+    ])
+  })
+
+  it('provides bridge extensions for base goerli list', async () => {
+    const chainified = await chainify(sampleL1TokenList_3)
+
+    expect(chainified.tokens).toEqual([
+      {
+        ...Tokens[ChainId.MAINNET]!.COINBASE_WRAPPED_STAKED_ETH,
+        extensions: {
+          bridgeInfo: {
+            [ChainId.ARBITRUM_ONE]: {
+              tokenAddress: COINBASE_WRAPPED_STAKED_ETH_ARBITRUM_ONE.address,
+            },
+            [ChainId.BASE_GOERLI]: {
+              tokenAddress: COINBASE_WRAPPED_STAKED_ETH_BASE_GOERLI.address,
+            },
+          },
+        },
+      },
+      {
+        ...Tokens[ChainId.ARBITRUM_ONE]!.COINBASE_WRAPPED_STAKED_ETH,
+        name: 'Coinbase Wrapped Staked ETH',
+        extensions: {
+          bridgeInfo: {
+            [ChainId.MAINNET]: {
+              tokenAddress: COINBASE_WRAPPED_STAKED_ETH.address,
+            },
+          },
+        },
+      },
+      {
+        ...Tokens[ChainId.BASE_GOERLI]!.COINBASE_WRAPPED_STAKED_ETH,
+        name: 'Coinbase Wrapped Staked ETH',
+        extensions: {
+          bridgeInfo: {
+            [ChainId.MAINNET]: {
+              tokenAddress: COINBASE_WRAPPED_STAKED_ETH.address,
             },
           },
         },

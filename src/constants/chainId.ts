@@ -15,4 +15,6 @@ export enum ChainId {
   BNB = 56,
 
   AVALANCHE = 43114,
+
+  BASE_GOERLI = 84531,
 }
