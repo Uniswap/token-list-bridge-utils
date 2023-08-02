@@ -135,7 +135,7 @@ async function hasExistingTokenContract(address: string, chainId: ChainId) {
   try {
     const contract: Contract = new web3.eth.Contract(ERC20Abi, address)
     await getTokenSymbolFromContract(contract)
-  } catch {
+  } catch (e) {
     return false
   }
 
@@ -231,7 +231,6 @@ async function getChildTokenDetails(
       childToken && (chainId === ChainId.BNB || chainId === ChainId.AVALANCHE)
         ? (childToken as MappedToken).decimals
         : undefined
-
     return {
       childTokenValid: childTokenValid,
       childTokenAddress: childTokenAddress,

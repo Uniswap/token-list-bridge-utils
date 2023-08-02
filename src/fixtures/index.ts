@@ -269,21 +269,25 @@ export const baseSampleTokenList_3 = {
     {
       ...Tokens[ChainId.BASE]!.COINBASE_WRAPPED_STAKED_ETH,
       extensions: {
-        baseBridgeAddress: "0x4200000000000000000000000000000000000010",
-        opListId: "default",
-        opTokenId: "cbETH"
-      }
+        bridgeInfo: {
+          [ChainId.MAINNET]: {
+            tokenAddress: COINBASE_WRAPPED_STAKED_ETH.address,
+          },
+        },
+      },
     } as unknown as TokenInfo,
     {
-      ...(Tokens[ChainId.MAINNET]!.COINBASE_WRAPPED_STAKED_ETH as unknown as TokenInfo),
+      ...(Tokens[ChainId.MAINNET]!
+        .COINBASE_WRAPPED_STAKED_ETH as unknown as TokenInfo),
       extensions: {
-        optimismBridgeAddress: "0x99C9fc46f92E8a1c0deC1b1747d010903E884bE1",
-        baseBridgeAddress: "0x3154Cf16ccdb4C6d922629664174b904d80F2C35",
-        opListId: "default",
-        opTokenId: "cbETH"
-      }
-    } as unknown as TokenInfo
-  ].sort(compareTokenInfos)
+        bridgeInfo: {
+          [ChainId.BASE]: {
+            tokenAddress: COINBASE_WRAPPED_STAKED_ETH_BASE.address,
+          },
+        },
+      },
+    } as unknown as TokenInfo,
+  ].sort(compareTokenInfos),
 }
 
 export const optimizedSampleTokenList = {
