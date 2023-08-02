@@ -86,6 +86,14 @@ export const DAI_AVALANCHE = new Token(
   'DAI.e'
 )
 
+export const DAI_BASE = new Token(
+  ChainId.BASE,
+  '0x50c5725949A6F0c72E6C4a641F24049A917DB0Cb',
+  18,
+  'DAI',
+  'Dai Stablecoin',
+)
+
 export const DAI_BASE_GOERLI = new Token(
   ChainId.BASE_GOERLI,
   "0x174956bDfbCEb6e53089297cce4fE2825E58d92C",

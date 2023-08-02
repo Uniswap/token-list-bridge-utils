@@ -10,6 +10,7 @@ import {
   DAI,
   DAI_ARBITRUM_ONE,
   DAI_AVALANCHE,
+  DAI_BASE,
   DAI_BASE_GOERLI,
   DAI_BNB,
   DAI_OPTIMISM,
@@ -33,7 +34,7 @@ import {
 jest.setTimeout(15000)
 
 describe(chainifyTokenList, () => {
-  xit('outputs Optimism list correctly', async () => {
+  it('outputs Optimism list correctly', async () => {
     const tokenList = await chainifyTokenList(
       [ChainId.OPTIMISM],
       sampleL1TokenList
@@ -53,7 +54,7 @@ describe(chainifyTokenList, () => {
     )
   })
 
-  xit('outputs arbitrum list correctly', async () => {
+  it('outputs arbitrum list correctly', async () => {
     const tokenList = await chainifyTokenList(
       [ChainId.ARBITRUM_ONE],
       sampleL1TokenList
@@ -77,7 +78,7 @@ describe(chainifyTokenList, () => {
     )
   })
 
-  xit('outputs polygon list correctly', async () => {
+  it('outputs polygon list correctly', async () => {
     const tokenList = await chainifyTokenList(
       [ChainId.POLYGON],
       sampleL1TokenList
@@ -98,7 +99,7 @@ describe(chainifyTokenList, () => {
   })
 })
 
-xit('outputs avalanche list correctly', async () => {
+it('outputs avalanche list correctly', async () => {
   const tokenList = await chainifyTokenList(
     [ChainId.AVALANCHE],
     sampleL1TokenList
@@ -117,7 +118,7 @@ xit('outputs avalanche list correctly', async () => {
   )
 })
 
-xit('outputs bnb list correctly', async () => {
+it('outputs bnb list correctly', async () => {
   const tokenList = await chainifyTokenList([ChainId.BNB], sampleL1TokenList)
   expect(tokenList).toBeDefined()
   expect(tokenList?.version).toEqual(bnbedSampleTokenList.version)
@@ -129,7 +130,7 @@ xit('outputs bnb list correctly', async () => {
   )
 })
 
-xit('outputs bnb list correctly with different decimals', async () => {
+it('outputs bnb list correctly with different decimals', async () => {
   const tokenList = await chainifyTokenList([ChainId.BNB], sampleL1TokenList_2)
   expect(tokenList).toBeDefined()
   expect(tokenList?.version).toEqual(bnbedSampleTokenList_2.version)
@@ -145,7 +146,7 @@ xit('outputs bnb list correctly with different decimals', async () => {
   )
 })
 
-xit('outputs base goerli list correctly', async () => {
+it('outputs base goerli list correctly', async () => {
   const tokenList = await chainifyTokenList(
     [ChainId.BASE_GOERLI],
     sampleL1TokenList_3
@@ -183,7 +184,7 @@ it('outputs base list correctly', async () => {
   )
 })
 
-xdescribe(mergeTokenLists, () => {
+describe(mergeTokenLists, () => {
   it('correctly deduplicates', () => {
     const merged = mergeTokenLists(sampleL1TokenList, sampleL1TokenList)
 
@@ -303,6 +304,9 @@ describe(chainify, () => {
               // destBridgeAddress: arbBridgeL2Address,
               // originBridgeAddress: arbBridgeL1Address,
             },
+            [ChainId.BASE]: {
+              tokenAddress: DAI_BASE.address,
+            },
             [ChainId.BASE_GOERLI]: {
               tokenAddress: DAI_BASE_GOERLI.address,
             },
@@ -339,6 +343,16 @@ describe(chainify, () => {
             },
           },
         },
+      },
+      {
+        ...Tokens[ChainId.BASE]!.DAI,
+        extensions: {
+          bridgeInfo: {
+            [ChainId.MAINNET]: {
+              tokenAddress: DAI.address,
+            }
+          }
+        }
       },
       {
         ...Tokens[ChainId.ARBITRUM_ONE]!.DAI,
@@ -389,31 +403,20 @@ describe(chainify, () => {
             [ChainId.OPTIMISM]: {
               tokenAddress: COINBASE_WRAPPED_STAKED_ETH_OPTIMISM.address,
             },
+            [ChainId.BASE]: {
+              tokenAddress: COINBASE_WRAPPED_STAKED_ETH_BASE.address,
+            },
             [ChainId.BASE_GOERLI]: {
               tokenAddress: COINBASE_WRAPPED_STAKED_ETH_BASE_GOERLI.address,
             },
             [ChainId.ARBITRUM_ONE]: {
               tokenAddress: COINBASE_WRAPPED_STAKED_ETH_ARBITRUM_ONE.address,
             },
-            [ChainId.BASE]: {
-              tokenAddress: COINBASE_WRAPPED_STAKED_ETH_BASE.address,
-            }
           },
         },
       },
       {
         ...Tokens[ChainId.OPTIMISM]!.COINBASE_WRAPPED_STAKED_ETH,
-        name: 'Coinbase Wrapped Staked ETH',
-        extensions: {
-          bridgeInfo: {
-            [ChainId.MAINNET]: {
-              tokenAddress: COINBASE_WRAPPED_STAKED_ETH.address,
-            },
-          },
-        },
-      },
-      {
-        ...Tokens[ChainId.ARBITRUM_ONE]!.COINBASE_WRAPPED_STAKED_ETH,
         name: 'Coinbase Wrapped Staked ETH',
         extensions: {
           bridgeInfo: {
@@ -433,6 +436,17 @@ describe(chainify, () => {
             }
           }
         }
+      },
+      {
+        ...Tokens[ChainId.ARBITRUM_ONE]!.COINBASE_WRAPPED_STAKED_ETH,
+        name: 'Coinbase Wrapped Staked ETH',
+        extensions: {
+          bridgeInfo: {
+            [ChainId.MAINNET]: {
+              tokenAddress: COINBASE_WRAPPED_STAKED_ETH.address,
+            },
+          },
+        },
       },
       {
         ...Tokens[ChainId.BASE_GOERLI]!.COINBASE_WRAPPED_STAKED_ETH,

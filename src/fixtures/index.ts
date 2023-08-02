@@ -16,6 +16,7 @@ import {
   COINBASE_WRAPPED_STAKED_ETH_BASE,
   DAI_BASE_GOERLI,
   COINBASE_WRAPPED_STAKED_ETH_OPTIMISM,
+  DAI_BASE,
 } from '../constants/tokens'
 import { compareTokenInfos } from '../utils'
 
@@ -48,6 +49,7 @@ export const Tokens: Partial<Record<ChainId, Record<string, TokenInfo>>> = {
     DAI: tokenToTokenInfo(DAI_AVALANCHE),
   },
   [ChainId.BASE]: {
+    DAI: tokenToTokenInfo(DAI_BASE),
     COINBASE_WRAPPED_STAKED_ETH: tokenToTokenInfo(
       COINBASE_WRAPPED_STAKED_ETH_BASE
     )
