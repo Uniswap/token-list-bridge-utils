@@ -17,6 +17,14 @@ export const COINBASE_WRAPPED_STAKED_ETH_BASE_GOERLI = new Token(
   'Coinbase Wrapped Staked ETH'
 )
 
+export const COINBASE_WRAPPED_STAKED_ETH_BASE = new Token(
+  ChainId.BASE,
+  '0x2Ae3F1Ec7F1F5012CFEab0185bfc7aa3cf0DEc22',
+  18,
+  'cbETH',
+  'Coinbase Wrapped Staked ETH'
+)
+
 export const COINBASE_WRAPPED_STAKED_ETH_ARBITRUM_ONE = new Token(
   ChainId.ARBITRUM_ONE,
   '0x1DEBd73E752bEaF79865Fd6446b0c970EaE7732f',
@@ -80,10 +88,10 @@ export const DAI_AVALANCHE = new Token(
 
 export const DAI_BASE_GOERLI = new Token(
   ChainId.BASE_GOERLI,
-  '0x174956bDfbCEb6e53089297cce4fE2825E58d92C',
+  "0x174956bDfbCEb6e53089297cce4fE2825E58d92C",
   18,
   'DAI',
-  'Dai Stablecoin'
+  'Dai Stablecoin',
 )
 
 export const USDT = new Token(

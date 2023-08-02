@@ -22,6 +22,7 @@ import {
 } from '../constants/types'
 import { AvalancheMappingProvider } from './AvalancheMappingProvider'
 import { BaseGoerliMappingProvider } from './BaseGoerliMappingProvider'
+import { BaseMappingProvider } from './BaseMappingProvider'
 
 const web3 = new Web3()
 
@@ -32,6 +33,7 @@ const CHAINS_WITH_MAPPING_PROVIDERS = [
   ChainId.OPTIMISM,
   ChainId.BNB,
   ChainId.AVALANCHE,
+  ChainId.BASE,
   ChainId.BASE_GOERLI,
 ]
 
@@ -152,6 +154,8 @@ function getMappingProvider(chainId: ChainId, l1TokenList: TokenList) {
       return new BnbMappingProvider()
     case ChainId.AVALANCHE:
       return new AvalancheMappingProvider()
+    case ChainId.BASE:
+      return new BaseMappingProvider()
     case ChainId.BASE_GOERLI:
       return new BaseGoerliMappingProvider()
     default:

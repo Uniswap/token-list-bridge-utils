@@ -4,6 +4,7 @@ import { ChainId } from './constants/chainId'
 import {
   COINBASE_WRAPPED_STAKED_ETH,
   COINBASE_WRAPPED_STAKED_ETH_ARBITRUM_ONE,
+  COINBASE_WRAPPED_STAKED_ETH_BASE,
   COINBASE_WRAPPED_STAKED_ETH_BASE_GOERLI,
   COINBASE_WRAPPED_STAKED_ETH_OPTIMISM,
   DAI,
@@ -26,6 +27,7 @@ import {
   avalanchedSampleTokenList,
   sampleL1TokenList_3,
   baseGoerliSampleTokenList_3,
+  baseSampleTokenList_3,
 } from './fixtures'
 
 jest.setTimeout(15000)
@@ -155,6 +157,25 @@ it('outputs base goerli list correctly', async () => {
   ).toEqual(
     // ignores other metadata
     baseGoerliSampleTokenList_3.tokens.map((t) => [
+      t.address,
+      t.chainId,
+      t.extensions,
+    ])
+  )
+})
+
+it('outputs base list correctly', async () => {
+  const tokenList = await chainifyTokenList(
+    [ChainId.BASE],
+    sampleL1TokenList_3
+  )
+  expect(tokenList).toBeDefined()
+  expect(tokenList?.version).toEqual(baseSampleTokenList_3.version)
+  expect(
+    tokenList?.tokens.map((t) => [t.address, t.chainId, t.extensions])
+  ).toEqual(
+    // ignores other metadata
+    baseSampleTokenList_3.tokens.map((t) => [
       t.address,
       t.chainId,
       t.extensions,
@@ -374,6 +395,7 @@ describe(chainify, () => {
             [ChainId.ARBITRUM_ONE]: {
               tokenAddress: COINBASE_WRAPPED_STAKED_ETH_ARBITRUM_ONE.address,
             },
+            // todo: add base mainnet cbETH when chain id is fixed
           },
         },
       },
@@ -399,6 +421,7 @@ describe(chainify, () => {
           },
         },
       },
+      // todo: add base mainnet cbETH when chain id is fixed
       {
         ...Tokens[ChainId.BASE_GOERLI]!.COINBASE_WRAPPED_STAKED_ETH,
         name: 'Coinbase Wrapped Staked ETH',

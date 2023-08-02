@@ -13,6 +13,7 @@ import {
   COINBASE_WRAPPED_STAKED_ETH,
   COINBASE_WRAPPED_STAKED_ETH_BASE_GOERLI,
   COINBASE_WRAPPED_STAKED_ETH_ARBITRUM_ONE,
+  COINBASE_WRAPPED_STAKED_ETH_BASE,
   DAI_BASE_GOERLI,
   COINBASE_WRAPPED_STAKED_ETH_OPTIMISM,
 } from '../constants/tokens'
@@ -45,6 +46,11 @@ export const Tokens: Partial<Record<ChainId, Record<string, TokenInfo>>> = {
   },
   [ChainId.AVALANCHE]: {
     DAI: tokenToTokenInfo(DAI_AVALANCHE),
+  },
+  [ChainId.BASE]: {
+    COINBASE_WRAPPED_STAKED_ETH: tokenToTokenInfo(
+      COINBASE_WRAPPED_STAKED_ETH_BASE
+    )
   },
   [ChainId.BASE_GOERLI]: {
     DAI: tokenToTokenInfo(DAI_BASE_GOERLI),
@@ -254,6 +260,30 @@ export const baseGoerliSampleTokenList_3 = {
       },
     } as unknown as TokenInfo,
   ].sort(compareTokenInfos),
+}
+
+export const baseSampleTokenList_3 = {
+  ...sampleL1TokenList_3,
+  name: 'Base Sample_3',
+  tokens: [
+    {
+      ...Tokens[ChainId.BASE]!.COINBASE_WRAPPED_STAKED_ETH,
+      extensions: {
+        baseBridgeAddress: "0x4200000000000000000000000000000000000010",
+        opListId: "default",
+        opTokenId: "cbETH"
+      }
+    } as unknown as TokenInfo,
+    {
+      ...(Tokens[ChainId.MAINNET]!.COINBASE_WRAPPED_STAKED_ETH as unknown as TokenInfo),
+      extensions: {
+        optimismBridgeAddress: "0x99C9fc46f92E8a1c0deC1b1747d010903E884bE1",
+        baseBridgeAddress: "0x3154Cf16ccdb4C6d922629664174b904d80F2C35",
+        opListId: "default",
+        opTokenId: "cbETH"
+      }
+    } as unknown as TokenInfo
+  ].sort(compareTokenInfos)
 }
 
 export const optimizedSampleTokenList = {
