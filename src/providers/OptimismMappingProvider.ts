@@ -5,7 +5,7 @@ import { GenericMappedTokenData } from '../constants/types'
 
 const optimismTokenListURL =
   'https://raw.githubusercontent.com/' +
-  'ethereum-optimism/ethereum-optimism.github.io/2138386277e4156d159615d1840882cecc398437/optimism.tokenlist.json'
+  'ethereum-optimism/ethereum-optimism.github.io/master/optimism.tokenlist.json'
 
 /**
  * The Optimism L2 mapping (linked above) is manually maintained by the Optimism team.
@@ -16,14 +16,27 @@ export class OptimismMappingProvider implements MappingProvider {
   async provide(): Promise<GenericMappedTokenData> {
     const tokens: { [key: string]: string | undefined } = {}
 
-    let optimismTokens = await getTokenList(optimismTokenListURL)
+    let allTokens = await getTokenList(optimismTokenListURL)
 
-    for (const token of optimismTokens.tokens) {
-      if (token.chainId === ChainId.MAINNET) {
-        tokens[token.address.toLowerCase()] =
-          token?.extensions?.bridgeInfo![ChainId.OPTIMISM].tokenAddress
+    let opTokenId_baseAddressMap: Record<string, string> = {}
+    allTokens.tokens.forEach((token) => {
+      if (token.chainId === ChainId.OPTIMISM) {
+        if (typeof token.extensions?.opTokenId === 'string') {
+          opTokenId_baseAddressMap[token.extensions.opTokenId] = token.address
+        }
       }
-    }
+    })
+
+    allTokens.tokens.forEach((token) => {
+      if (
+        token.chainId === ChainId.MAINNET &&
+        typeof token.extensions?.opTokenId === 'string' &&
+        token.extensions!.opTokenId in opTokenId_baseAddressMap
+      ) {
+        tokens[token.address.toLowerCase()] =
+          opTokenId_baseAddressMap[token.extensions!.opTokenId]
+      }
+    })
 
     return tokens
   }
