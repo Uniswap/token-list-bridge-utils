@@ -1,15 +1,13 @@
 {
   "author": "Justin Domingue",
   "devDependencies": {
-    "@size-limit/preset-small-lib": "^7.0.8",
     "@tsconfig/recommended": "^1.0.1",
     "@types/jest": "^27.4.1",
-    "@types/lodash": "^4.14.179",
+    "@types/lodash": "^4.14.196",
     "@uniswap/token-lists": "^1.0.0-beta.33",
     "dts-cli": "^1.4.0",
     "eslint-plugin-prettier": "^5.0.0",
     "husky": "^7.0.4",
-    "size-limit": "^7.0.8",
     "ts-jest": "^29.1.1",
     "tslib": "^2.3.1",
     "typescript": "^5.1.6",
@@ -41,25 +39,13 @@
     "trailingComma": "es5"
   },
   "scripts": {
-    "analyze": "size-limit --why",
     "build": "dts build",
     "lint": "dts lint",
     "prepare": "dts build",
-    "size": "size-limit",
     "start": "dts watch",
     "test": "dts test",
     "deduplicate": "yarn-deduplicate --strategy=highest"
   },
-  "size-limit": [
-    {
-      "limit": "10 KB",
-      "path": "dist/token-list-bridge-utils.cjs.production.min.js"
-    },
-    {
-      "limit": "10 KB",
-      "path": "dist/token-list-bridge-utils.esm.js"
-    }
-  ],
   "typings": "dist/index.d.ts",
   "version": "2.1.0",
   "dependencies": {
@@ -69,6 +55,7 @@
     "dotenv": "^16.0.1",
     "ethers": "^5.6.5",
     "lodash": "^4.17.21",
+    "lodash-es": "^4.17.21",
     "prettier": "^3.0.1",
     "web3": "^1.7.3"
   }
