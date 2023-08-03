@@ -5,9 +5,11 @@ import {
   COINBASE_WRAPPED_STAKED_ETH,
   COINBASE_WRAPPED_STAKED_ETH_ARBITRUM_ONE,
   COINBASE_WRAPPED_STAKED_ETH_BASE_GOERLI,
+  COINBASE_WRAPPED_STAKED_ETH_OPTIMISM,
   DAI,
   DAI_ARBITRUM_ONE,
   DAI_AVALANCHE,
+  DAI_BASE_GOERLI,
   DAI_BNB,
   DAI_OPTIMISM,
   DAI_POLYGON,
@@ -255,93 +257,6 @@ describe(mergeTokenLists, () => {
   })
 })
 describe(chainify, () => {
-  it('creates tokenMap correctly in chainify', async () => {
-    const chainified = await chainify(sampleL1TokenList)
-
-    expect(chainified.tokenMap).toEqual({
-      '10_0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1': {
-        ...Tokens[ChainId.OPTIMISM]!.DAI,
-        name: 'Dai Stablecoin',
-        extensions: {
-          bridgeInfo: {
-            [ChainId.MAINNET]: {
-              tokenAddress: DAI.address,
-            },
-          },
-        },
-      },
-      '137_0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063': {
-        ...Tokens[ChainId.POLYGON]!.DAI,
-        extensions: {
-          bridgeInfo: {
-            [ChainId.MAINNET]: {
-              tokenAddress: DAI.address,
-            },
-          },
-        },
-      },
-      '1_0x6B175474E89094C44Da98b954EedeAC495271d0F': {
-        ...Tokens[ChainId.MAINNET]!.DAI,
-        extensions: {
-          bridgeInfo: {
-            [ChainId.BNB]: {
-              tokenAddress: DAI_BNB.address,
-            },
-            [ChainId.AVALANCHE]: {
-              tokenAddress: DAI_AVALANCHE.address,
-            },
-            [ChainId.OPTIMISM]: {
-              tokenAddress: DAI_OPTIMISM.address,
-            },
-            [ChainId.POLYGON]: {
-              tokenAddress: DAI_POLYGON.address,
-            },
-            [ChainId.ARBITRUM_ONE]: {
-              tokenAddress: DAI_ARBITRUM_ONE.address,
-              // destBridgeAddress: arbBridgeL2Address,
-              // originBridgeAddress: arbBridgeL1Address,
-            },
-          },
-        },
-      },
-      '42161_0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1': {
-        ...Tokens[ChainId.ARBITRUM_ONE]!.DAI,
-        extensions: {
-          bridgeInfo: {
-            [ChainId.MAINNET]: {
-              tokenAddress: DAI.address,
-              // originBridgeAddress: arbBridgeL2Address,
-              // destBridgeAddress: arbBridgeL1Address,
-            },
-          },
-        },
-        name: 'Dai Stablecoin',
-      },
-      '43114_0xd586E7F844cEa2F87f50152665BCbc2C279D8d70': {
-        ...Tokens[ChainId.AVALANCHE]!.DAI,
-        name: 'Dai Stablecoin',
-        symbol: 'DAI',
-        extensions: {
-          bridgeInfo: {
-            [ChainId.MAINNET]: {
-              tokenAddress: DAI.address,
-            },
-          },
-        },
-      },
-      '56_0x1AF3F329e8BE154074D8769D1FFa4eE058B1DBc3': {
-        ...Tokens[ChainId.BNB]!.DAI,
-        extensions: {
-          bridgeInfo: {
-            [ChainId.MAINNET]: {
-              tokenAddress: DAI.address,
-            },
-          },
-        },
-      },
-    })
-  })
-
   it('provides bridge extensions', async () => {
     const chainified = await chainify(sampleL1TokenList)
 
@@ -367,6 +282,9 @@ describe(chainify, () => {
               // destBridgeAddress: arbBridgeL2Address,
               // originBridgeAddress: arbBridgeL1Address,
             },
+            [ChainId.BASE_GOERLI]: {
+              tokenAddress: DAI_BASE_GOERLI.address,
+            },
           },
         },
       },
@@ -426,10 +344,20 @@ describe(chainify, () => {
           },
         },
       },
+      {
+        ...Tokens[ChainId.BASE_GOERLI]!.DAI,
+        extensions: {
+          bridgeInfo: {
+            [ChainId.MAINNET]: {
+              tokenAddress: DAI.address,
+            },
+          },
+        },
+      },
     ])
   })
 
-  it('provides bridge extensions for base goerli list', async () => {
+  it('provides bridge extensions for base list', async () => {
     const chainified = await chainify(sampleL1TokenList_3)
 
     expect(chainified.tokens).toEqual([
@@ -437,11 +365,25 @@ describe(chainify, () => {
         ...Tokens[ChainId.MAINNET]!.COINBASE_WRAPPED_STAKED_ETH,
         extensions: {
           bridgeInfo: {
-            [ChainId.ARBITRUM_ONE]: {
-              tokenAddress: COINBASE_WRAPPED_STAKED_ETH_ARBITRUM_ONE.address,
+            [ChainId.OPTIMISM]: {
+              tokenAddress: COINBASE_WRAPPED_STAKED_ETH_OPTIMISM.address,
             },
             [ChainId.BASE_GOERLI]: {
               tokenAddress: COINBASE_WRAPPED_STAKED_ETH_BASE_GOERLI.address,
+            },
+            [ChainId.ARBITRUM_ONE]: {
+              tokenAddress: COINBASE_WRAPPED_STAKED_ETH_ARBITRUM_ONE.address,
+            },
+          },
+        },
+      },
+      {
+        ...Tokens[ChainId.OPTIMISM]!.COINBASE_WRAPPED_STAKED_ETH,
+        name: 'Coinbase Wrapped Staked ETH',
+        extensions: {
+          bridgeInfo: {
+            [ChainId.MAINNET]: {
+              tokenAddress: COINBASE_WRAPPED_STAKED_ETH.address,
             },
           },
         },

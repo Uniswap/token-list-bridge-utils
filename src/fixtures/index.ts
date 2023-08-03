@@ -13,6 +13,8 @@ import {
   COINBASE_WRAPPED_STAKED_ETH,
   COINBASE_WRAPPED_STAKED_ETH_BASE_GOERLI,
   COINBASE_WRAPPED_STAKED_ETH_ARBITRUM_ONE,
+  DAI_BASE_GOERLI,
+  COINBASE_WRAPPED_STAKED_ETH_OPTIMISM,
 } from '../constants/tokens'
 import { compareTokenInfos } from '../utils'
 
@@ -33,6 +35,9 @@ export const Tokens: Partial<Record<ChainId, Record<string, TokenInfo>>> = {
   },
   [ChainId.OPTIMISM]: {
     DAI: tokenToTokenInfo(DAI_OPTIMISM),
+    COINBASE_WRAPPED_STAKED_ETH: tokenToTokenInfo(
+      COINBASE_WRAPPED_STAKED_ETH_OPTIMISM
+    ),
   },
   [ChainId.BNB]: {
     DAI: tokenToTokenInfo(DAI_BNB),
@@ -42,6 +47,7 @@ export const Tokens: Partial<Record<ChainId, Record<string, TokenInfo>>> = {
     DAI: tokenToTokenInfo(DAI_AVALANCHE),
   },
   [ChainId.BASE_GOERLI]: {
+    DAI: tokenToTokenInfo(DAI_BASE_GOERLI),
     COINBASE_WRAPPED_STAKED_ETH: tokenToTokenInfo(
       COINBASE_WRAPPED_STAKED_ETH_BASE_GOERLI
     ),
