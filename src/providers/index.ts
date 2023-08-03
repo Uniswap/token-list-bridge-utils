@@ -22,6 +22,7 @@ import {
 } from '../constants/types'
 import { AvalancheMappingProvider } from './AvalancheMappingProvider'
 import { BaseGoerliMappingProvider } from './BaseGoerliMappingProvider'
+import { BaseMappingProvider } from './BaseMappingProvider'
 
 const web3 = new Web3()
 
@@ -32,6 +33,7 @@ const CHAINS_WITH_MAPPING_PROVIDERS = [
   ChainId.OPTIMISM,
   ChainId.BNB,
   ChainId.AVALANCHE,
+  ChainId.BASE,
   ChainId.BASE_GOERLI,
 ]
 
@@ -133,7 +135,7 @@ async function hasExistingTokenContract(address: string, chainId: ChainId) {
   try {
     const contract: Contract = new web3.eth.Contract(ERC20Abi, address)
     await getTokenSymbolFromContract(contract)
-  } catch {
+  } catch (e) {
     return false
   }
 
@@ -152,6 +154,8 @@ function getMappingProvider(chainId: ChainId, l1TokenList: TokenList) {
       return new BnbMappingProvider()
     case ChainId.AVALANCHE:
       return new AvalancheMappingProvider()
+    case ChainId.BASE:
+      return new BaseMappingProvider()
     case ChainId.BASE_GOERLI:
       return new BaseGoerliMappingProvider()
     default:
@@ -227,7 +231,6 @@ async function getChildTokenDetails(
       childToken && (chainId === ChainId.BNB || chainId === ChainId.AVALANCHE)
         ? (childToken as MappedToken).decimals
         : undefined
-
     return {
       childTokenValid: childTokenValid,
       childTokenAddress: childTokenAddress,
