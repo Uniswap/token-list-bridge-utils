@@ -17,7 +17,7 @@ export class BaseGoerliMappingProvider implements MappingProvider {
 
     let allTokens = await getTokenList(baseGoerliTokenListURL)
 
-    let opTokenId_baseGoerliAddressMap = {}
+    let opTokenId_baseGoerliAddressMap: Record<string, string> = {}
     allTokens.tokens.forEach((token) => {
       if (token.chainId === ChainId.BASE_GOERLI) {
         if (typeof token.extensions?.opTokenId === 'string') {

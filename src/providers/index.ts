@@ -55,7 +55,7 @@ export async function buildList(
       } = {}
       const l2MappingExtension = {
         extensions: {
-          bridgeInfo: {},
+          bridgeInfo: {} as any,
         },
       }
       // build out the extensions.bridgeInfo data containing mappings for each L2 chain
@@ -197,8 +197,14 @@ async function getChildTokenDetails(
   childTokenAddress: string | undefined
   decimals?: number | undefined
 }> {
-  const existingMapping: undefined | string =
-    l1Token?.extensions?.bridgeInfo?.[chainId]?.tokenAddress
+  const bridgeInfo = l1Token?.extensions?.bridgeInfo
+  let existingMapping: undefined | string
+  if (bridgeInfo && typeof bridgeInfo === 'object') {
+    const bridgeInfoForChain = bridgeInfo[chainId]
+    if (bridgeInfoForChain && typeof bridgeInfoForChain === 'object') {
+      existingMapping = bridgeInfoForChain.tokenAddress as string
+    }
+  }
   // use the externally fetched mappings if manual entry doesn't exist for the token/chain mapping
   // and the given chain is supported for fetching mappings
   if (

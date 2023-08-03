@@ -7,13 +7,16 @@
     "@types/lodash": "^4.14.179",
     "@uniswap/token-lists": "^1.0.0-beta.33",
     "dts-cli": "^1.4.0",
+    "eslint-plugin-prettier": "^5.0.0",
     "husky": "^7.0.4",
     "size-limit": "^7.0.8",
+    "ts-jest": "^29.1.1",
     "tslib": "^2.3.1",
-    "typescript": "^4.5.5"
+    "typescript": "^4.5.5",
+    "yarn-deduplicate": "^6.0.2"
   },
   "engines": {
-    "node": ">=12"
+    "node": ">=16"
   },
   "files": [
     "dist",
@@ -44,7 +47,8 @@
     "prepare": "dts build",
     "size": "size-limit",
     "start": "dts watch",
-    "test": "dts test"
+    "test": "dts test",
+    "deduplicate": "yarn-deduplicate --strategy=highest"
   },
   "size-limit": [
     {
@@ -59,13 +63,13 @@
   "typings": "dist/index.d.ts",
   "version": "2.1.0",
   "dependencies": {
-    "@arbitrum/sdk": "^1.1.4",
-    "@uniswap/sdk-core": "^3.0.1",
+    "@arbitrum/sdk": "^3.1.6",
+    "@uniswap/sdk-core": "^4.0.6",
     "axios": "^0.26.0",
     "dotenv": "^16.0.1",
     "ethers": "^5.6.5",
     "lodash": "^4.17.21",
-    "prettier": "^2.7.1",
+    "prettier": "^3.0.1",
     "web3": "^1.7.3"
   }
 }
