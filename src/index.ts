@@ -34,13 +34,7 @@ export async function chainify(
     chainified
   )
 
-  const tokenMap = {}
-  if (merged.tokens && merged.tokens.length > 0) {
-    merged.tokens.forEach((token) => {
-      tokenMap[`${token.chainId}_${token.address}`] = token
-    })
-  }
-  return { ...merged, tokenMap }
+  return merged
 }
 
 /**
@@ -81,7 +75,10 @@ export function mergeTokenLists(
     }
 
     const merged = merge(group[0], group[1])
-    if (merged.extensions?.bridgeInfo) {
+    if (
+      merged.extensions?.bridgeInfo &&
+      typeof merged.extensions.bridgeInfo === 'object'
+    ) {
       // remove reference to self-chain from merge
       delete merged.extensions.bridgeInfo[merged.chainId]
     }
