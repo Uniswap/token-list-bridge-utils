@@ -20,9 +20,17 @@ export class OptimismMappingProvider implements MappingProvider {
 
     for (const token of optimismTokens.tokens) {
       const bridgeInfo = token?.extensions?.bridgeInfo
-      if (token.chainId === ChainId.MAINNET && bridgeInfo && typeof bridgeInfo === 'object') {
+      if (
+        token.chainId === ChainId.MAINNET &&
+        bridgeInfo &&
+        typeof bridgeInfo === 'object'
+      ) {
         const opBridgeInfo = bridgeInfo[ChainId.OPTIMISM]
-        if (opBridgeInfo && typeof opBridgeInfo === 'object' && typeof opBridgeInfo.tokenAddress === 'string') {
+        if (
+          opBridgeInfo &&
+          typeof opBridgeInfo === 'object' &&
+          typeof opBridgeInfo.tokenAddress === 'string'
+        ) {
           tokens[token.address.toLowerCase()] = opBridgeInfo.tokenAddress
         }
       }
