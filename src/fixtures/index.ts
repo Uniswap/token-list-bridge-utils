@@ -52,7 +52,7 @@ export const Tokens: Partial<Record<ChainId, Record<string, TokenInfo>>> = {
     DAI: tokenToTokenInfo(DAI_BASE),
     COINBASE_WRAPPED_STAKED_ETH: tokenToTokenInfo(
       COINBASE_WRAPPED_STAKED_ETH_BASE
-    )
+    ),
   },
   [ChainId.BASE_GOERLI]: {
     DAI: tokenToTokenInfo(DAI_BASE_GOERLI),

@@ -17,12 +17,11 @@ export class BaseMappingProvider implements MappingProvider {
 
     let allTokens = await getTokenList(baseGoerliTokenListURL)
 
-    let opTokenId_baseAddressMap = {}
+    let opTokenId_baseAddressMap: Record<string, string> = {}
     allTokens.tokens.forEach((token) => {
       if (token.chainId === ChainId.BASE) {
         if (typeof token.extensions?.opTokenId === 'string') {
-          opTokenId_baseAddressMap[token.extensions.opTokenId] =
-            token.address
+          opTokenId_baseAddressMap[token.extensions.opTokenId] = token.address
         }
       }
     })

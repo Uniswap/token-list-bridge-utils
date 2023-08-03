@@ -166,10 +166,7 @@ it('outputs base goerli list correctly', async () => {
 })
 
 it('outputs base list correctly', async () => {
-  const tokenList = await chainifyTokenList(
-    [ChainId.BASE],
-    sampleL1TokenList_3
-  )
+  const tokenList = await chainifyTokenList([ChainId.BASE], sampleL1TokenList_3)
   expect(tokenList).toBeDefined()
   expect(tokenList?.version).toEqual(baseSampleTokenList_3.version)
   expect(
@@ -350,9 +347,9 @@ describe(chainify, () => {
           bridgeInfo: {
             [ChainId.MAINNET]: {
               tokenAddress: DAI.address,
-            }
-          }
-        }
+            },
+          },
+        },
       },
       {
         ...Tokens[ChainId.ARBITRUM_ONE]!.DAI,
@@ -433,9 +430,9 @@ describe(chainify, () => {
           bridgeInfo: {
             [ChainId.MAINNET]: {
               tokenAddress: COINBASE_WRAPPED_STAKED_ETH.address,
-            }
-          }
-        }
+            },
+          },
+        },
       },
       {
         ...Tokens[ChainId.ARBITRUM_ONE]!.COINBASE_WRAPPED_STAKED_ETH,
