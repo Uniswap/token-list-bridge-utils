@@ -117,3 +117,11 @@ export const USDT_BNB = new Token(
   'USDT',
   'Tether USD'
 )
+
+export const USDT_CELO = new Token(
+  ChainId.CELO,
+  '0x617f3112bf5397D0467D315cC709EF968D9ba546',
+  6,
+  'USDT',
+  'Tether USD'
+)

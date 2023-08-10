@@ -23,6 +23,7 @@ import {
 import { AvalancheMappingProvider } from './AvalancheMappingProvider'
 import { BaseGoerliMappingProvider } from './BaseGoerliMappingProvider'
 import { BaseMappingProvider } from './BaseMappingProvider'
+import { CeloMappingProvider } from './CeloMappingProvider'
 
 const web3 = new Web3()
 
@@ -33,6 +34,7 @@ const CHAINS_WITH_MAPPING_PROVIDERS = [
   ChainId.OPTIMISM,
   ChainId.BNB,
   ChainId.AVALANCHE,
+  ChainId.CELO,
   ChainId.BASE,
   ChainId.BASE_GOERLI,
 ]
@@ -154,6 +156,8 @@ function getMappingProvider(chainId: ChainId, l1TokenList: TokenList) {
       return new BnbMappingProvider()
     case ChainId.AVALANCHE:
       return new AvalancheMappingProvider()
+    case ChainId.CELO:
+      return new CeloMappingProvider()
     case ChainId.BASE:
       return new BaseMappingProvider()
     case ChainId.BASE_GOERLI:
@@ -228,7 +232,7 @@ async function getChildTokenDetails(
         (await hasExistingTokenContract(childTokenAddress, chainId))
     )
     const decimals =
-      childToken && (chainId === ChainId.BNB || chainId === ChainId.AVALANCHE)
+      childToken && (chainId === ChainId.BNB || chainId === ChainId.AVALANCHE || chainId === ChainId.CELO)
         ? (childToken as MappedToken).decimals
         : undefined
     return {

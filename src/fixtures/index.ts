@@ -16,7 +16,7 @@ import {
   COINBASE_WRAPPED_STAKED_ETH_BASE,
   DAI_BASE_GOERLI,
   COINBASE_WRAPPED_STAKED_ETH_OPTIMISM,
-  DAI_BASE,
+  DAI_BASE, USDT_CELO,
 } from '../constants/tokens'
 import { compareTokenInfos } from '../utils'
 
@@ -59,6 +59,9 @@ export const Tokens: Partial<Record<ChainId, Record<string, TokenInfo>>> = {
     COINBASE_WRAPPED_STAKED_ETH: tokenToTokenInfo(
       COINBASE_WRAPPED_STAKED_ETH_BASE_GOERLI
     ),
+  },
+  [ChainId.CELO]: {
+    USDT: tokenToTokenInfo(USDT_CELO),
   },
 }
 
@@ -229,6 +232,34 @@ export const bnbedSampleTokenList_2 = {
         bridgeInfo: {
           [ChainId.BNB]: {
             tokenAddress: USDT_BNB.address,
+          },
+        },
+      },
+    } as unknown as TokenInfo,
+  ].sort(compareTokenInfos),
+}
+
+//todo check if this is needed
+export const celoedSampleTokenList = {
+  ...sampleL1TokenList_2,
+  name: 'Celo Sample',
+  tokens: [
+    {
+      ...Tokens[ChainId.CELO]!.USDT,
+      extensions: {
+        bridgeInfo: {
+          [ChainId.MAINNET]: {
+            tokenAddress: USDT.address,
+          },
+        },
+      },
+    } as unknown as TokenInfo,
+    {
+      ...(Tokens[ChainId.MAINNET]!.USDT as unknown as TokenInfo),
+      extensions: {
+        bridgeInfo: {
+          [ChainId.CELO]: {
+            tokenAddress: USDT_CELO.address,
           },
         },
       },
