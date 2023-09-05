@@ -16,7 +16,8 @@ import {
   COINBASE_WRAPPED_STAKED_ETH_BASE,
   DAI_BASE_GOERLI,
   COINBASE_WRAPPED_STAKED_ETH_OPTIMISM,
-  DAI_BASE, USDT_CELO,
+  DAI_BASE,
+  USDT_CELO,
 } from '../constants/tokens'
 import { compareTokenInfos } from '../utils'
 
