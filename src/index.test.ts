@@ -28,7 +28,8 @@ import {
   avalanchedSampleTokenList,
   sampleL1TokenList_3,
   baseGoerliSampleTokenList_3,
-  baseSampleTokenList_3, celoedSampleTokenList,
+  baseSampleTokenList_3,
+  celoedSampleTokenList,
 } from './fixtures'
 
 jest.setTimeout(15000)

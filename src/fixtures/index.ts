@@ -239,7 +239,6 @@ export const bnbedSampleTokenList_2 = {
   ].sort(compareTokenInfos),
 }
 
-//todo check if this is needed
 export const celoedSampleTokenList = {
   ...sampleL1TokenList_2,
   name: 'Celo Sample',
