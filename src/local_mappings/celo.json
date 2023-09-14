@@ -1,0 +1,19 @@
+{
+  "0xdac17f958d2ee523a2206206994597c13d831ec7": {
+    "childToken": "0x617f3112bf5397D0467D315cC709EF968D9ba546",
+    "decimals": 18
+  },
+  "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599": {
+    "childToken": "0xd71Ffd0940c920786eC4DbB5A12306669b5b81EF",
+    "decimals": 18
+  },
+  "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2": {
+    "childToken": "0xb829b68f57CC546dA7E5806A929e53bE32a4625D",
+    "decimals": 18
+  },
+  "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48": {
+    "childToken": "0x37f750B7cC259A2f741AF45294f6a16572CF5cAd",
+    "decimals": 6
+  }
+}
+

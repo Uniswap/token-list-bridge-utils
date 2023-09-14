@@ -29,6 +29,7 @@ import {
   sampleL1TokenList_3,
   baseGoerliSampleTokenList_3,
   baseSampleTokenList_3,
+  celoedSampleTokenList,
 } from './fixtures'
 
 jest.setTimeout(15000)
@@ -127,6 +128,25 @@ it('outputs bnb list correctly', async () => {
   ).toEqual(
     // ignores other metadata
     bnbedSampleTokenList.tokens.map((t) => [t.address, t.chainId, t.extensions])
+  )
+})
+
+it('outputs celo list correctly', async () => {
+  const tokenList = await chainifyTokenList(
+    [ChainId.CELO],
+    sampleL1TokenList_2
+  )
+  expect(tokenList).toBeDefined()
+  expect(tokenList?.version).toEqual(celoedSampleTokenList.version)
+  expect(
+    tokenList?.tokens.map((t) => [t.address, t.chainId, t.extensions])
+  ).toEqual(
+    // ignores other metadata
+    celoedSampleTokenList.tokens.map((t) => [
+      t.address,
+      t.chainId,
+      t.extensions,
+    ])
   )
 })
 

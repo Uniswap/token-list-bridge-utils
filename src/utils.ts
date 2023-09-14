@@ -112,6 +112,10 @@ export function getRpcUrl(chainId: ChainId): string {
       return 'https://bsc-dataseed1.binance.org'
     case ChainId.AVALANCHE:
       return 'https://api.avax.network/ext/bc/C/rpc'
+    case ChainId.CELO:
+      return 'https://forno.celo.org/'
+    case ChainId.CELO_ALFAJORES:
+      return 'https://alfajores-forno.celo-testnet.org/'
     case ChainId.BASE:
       return 'https://mainnet.base.org'
     case ChainId.BASE_GOERLI:
