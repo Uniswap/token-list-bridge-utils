@@ -232,7 +232,10 @@ async function getChildTokenDetails(
         (await hasExistingTokenContract(childTokenAddress, chainId))
     )
     const decimals =
-      childToken && (chainId === ChainId.BNB || chainId === ChainId.AVALANCHE || chainId === ChainId.CELO)
+      childToken &&
+      (chainId === ChainId.BNB ||
+        chainId === ChainId.AVALANCHE ||
+        chainId === ChainId.CELO)
         ? (childToken as MappedToken).decimals
         : undefined
     return {
