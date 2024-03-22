@@ -132,10 +132,7 @@ it('outputs bnb list correctly', async () => {
 })
 
 it('outputs celo list correctly', async () => {
-  const tokenList = await chainifyTokenList(
-    [ChainId.CELO],
-    sampleL1TokenList_2
-  )
+  const tokenList = await chainifyTokenList([ChainId.CELO], sampleL1TokenList_2)
   expect(tokenList).toBeDefined()
   expect(tokenList?.version).toEqual(celoedSampleTokenList.version)
   expect(

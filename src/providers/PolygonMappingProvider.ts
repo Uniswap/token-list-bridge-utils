@@ -3,7 +3,8 @@ import { MappingProvider } from './MappingProvider'
 import { PolygonMappedTokenData } from '../constants/types'
 
 // called from https://mapper.polygon.technology
-const url = 'https://api-polygon-tokens.polygon.technology/api/v1/info/all-mappings'
+const url =
+  'https://api-polygon-tokens.polygon.technology/api/v1/info/all-mappings'
 const access_token = '504afd90-3228-4df9-9d88-9b4d70646101'
 
 /**
