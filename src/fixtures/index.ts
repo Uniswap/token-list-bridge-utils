@@ -11,10 +11,8 @@ import {
   USDT,
   USDT_BNB,
   COINBASE_WRAPPED_STAKED_ETH,
-  COINBASE_WRAPPED_STAKED_ETH_BASE_GOERLI,
   COINBASE_WRAPPED_STAKED_ETH_ARBITRUM_ONE,
   COINBASE_WRAPPED_STAKED_ETH_BASE,
-  DAI_BASE_GOERLI,
   COINBASE_WRAPPED_STAKED_ETH_OPTIMISM,
   DAI_BASE,
   USDT_CELO,
@@ -53,12 +51,6 @@ export const Tokens: Partial<Record<ChainId, Record<string, TokenInfo>>> = {
     DAI: tokenToTokenInfo(DAI_BASE),
     COINBASE_WRAPPED_STAKED_ETH: tokenToTokenInfo(
       COINBASE_WRAPPED_STAKED_ETH_BASE
-    ),
-  },
-  [ChainId.BASE_GOERLI]: {
-    DAI: tokenToTokenInfo(DAI_BASE_GOERLI),
-    COINBASE_WRAPPED_STAKED_ETH: tokenToTokenInfo(
-      COINBASE_WRAPPED_STAKED_ETH_BASE_GOERLI
     ),
   },
   [ChainId.CELO]: {
@@ -260,34 +252,6 @@ export const celoedSampleTokenList = {
         bridgeInfo: {
           [ChainId.CELO]: {
             tokenAddress: USDT_CELO.address,
-          },
-        },
-      },
-    } as unknown as TokenInfo,
-  ].sort(compareTokenInfos),
-}
-
-export const baseGoerliSampleTokenList_3 = {
-  ...sampleL1TokenList_3,
-  name: 'Base Goerli Sample_3',
-  tokens: [
-    {
-      ...Tokens[ChainId.BASE_GOERLI]!.COINBASE_WRAPPED_STAKED_ETH,
-      extensions: {
-        bridgeInfo: {
-          [ChainId.MAINNET]: {
-            tokenAddress: COINBASE_WRAPPED_STAKED_ETH.address,
-          },
-        },
-      },
-    } as unknown as TokenInfo,
-    {
-      ...(Tokens[ChainId.MAINNET]!
-        .COINBASE_WRAPPED_STAKED_ETH as unknown as TokenInfo),
-      extensions: {
-        bridgeInfo: {
-          [ChainId.BASE_GOERLI]: {
-            tokenAddress: COINBASE_WRAPPED_STAKED_ETH_BASE_GOERLI.address,
           },
         },
       },

@@ -36,7 +36,6 @@ const CHAINS_WITH_MAPPING_PROVIDERS = [
   ChainId.AVALANCHE,
   ChainId.CELO,
   ChainId.BASE,
-  ChainId.BASE_GOERLI,
 ]
 
 export async function buildList(
@@ -160,8 +159,6 @@ function getMappingProvider(chainId: ChainId, l1TokenList: TokenList) {
       return new CeloMappingProvider()
     case ChainId.BASE:
       return new BaseMappingProvider()
-    case ChainId.BASE_GOERLI:
-      return new BaseGoerliMappingProvider()
     default:
       throw new Error(`Chain ${chainId} not supported for fetching mappings.`)
   }
