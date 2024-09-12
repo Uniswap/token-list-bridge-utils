@@ -95,7 +95,7 @@ export const isTokenList = (obj: any) => {
 export function getRpcUrl(chainId: ChainId): string {
   switch (chainId) {
     case ChainId.MAINNET:
-      return 'https://rpc.ankr.com/eth'
+      return 'https://ethereum-rpc.publicnode.com'
     case ChainId.OPTIMISM:
       return 'https://rpc.ankr.com/optimism' // seems to have higher rate limit than https://mainnet.optimism.io/
     case ChainId.OPTIMISTIC_KOVAN:
