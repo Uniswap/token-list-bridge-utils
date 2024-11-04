@@ -5,13 +5,11 @@ import {
   COINBASE_WRAPPED_STAKED_ETH,
   COINBASE_WRAPPED_STAKED_ETH_ARBITRUM_ONE,
   COINBASE_WRAPPED_STAKED_ETH_BASE,
-  COINBASE_WRAPPED_STAKED_ETH_BASE_GOERLI,
   COINBASE_WRAPPED_STAKED_ETH_OPTIMISM,
   DAI,
   DAI_ARBITRUM_ONE,
   DAI_AVALANCHE,
   DAI_BASE,
-  DAI_BASE_GOERLI,
   DAI_BNB,
   DAI_OPTIMISM,
   DAI_POLYGON,
@@ -27,7 +25,6 @@ import {
   bnbedSampleTokenList_2,
   avalanchedSampleTokenList,
   sampleL1TokenList_3,
-  baseGoerliSampleTokenList_3,
   baseSampleTokenList_3,
   celoedSampleTokenList,
 } from './fixtures'
@@ -156,25 +153,6 @@ it('outputs bnb list correctly with different decimals', async () => {
   ).toEqual(
     // ignores other metadata
     bnbedSampleTokenList_2.tokens.map((t) => [
-      t.address,
-      t.chainId,
-      t.extensions,
-    ])
-  )
-})
-
-it('outputs base goerli list correctly', async () => {
-  const tokenList = await chainifyTokenList(
-    [ChainId.BASE_GOERLI],
-    sampleL1TokenList_3
-  )
-  expect(tokenList).toBeDefined()
-  expect(tokenList?.version).toEqual(baseGoerliSampleTokenList_3.version)
-  expect(
-    tokenList?.tokens.map((t) => [t.address, t.chainId, t.extensions])
-  ).toEqual(
-    // ignores other metadata
-    baseGoerliSampleTokenList_3.tokens.map((t) => [
       t.address,
       t.chainId,
       t.extensions,
@@ -321,9 +299,6 @@ describe(chainify, () => {
             [ChainId.BASE]: {
               tokenAddress: DAI_BASE.address,
             },
-            [ChainId.BASE_GOERLI]: {
-              tokenAddress: DAI_BASE_GOERLI.address,
-            },
           },
         },
       },
@@ -393,16 +368,6 @@ describe(chainify, () => {
           },
         },
       },
-      {
-        ...Tokens[ChainId.BASE_GOERLI]!.DAI,
-        extensions: {
-          bridgeInfo: {
-            [ChainId.MAINNET]: {
-              tokenAddress: DAI.address,
-            },
-          },
-        },
-      },
     ])
   })
 
@@ -419,9 +384,6 @@ describe(chainify, () => {
             },
             [ChainId.BASE]: {
               tokenAddress: COINBASE_WRAPPED_STAKED_ETH_BASE.address,
-            },
-            [ChainId.BASE_GOERLI]: {
-              tokenAddress: COINBASE_WRAPPED_STAKED_ETH_BASE_GOERLI.address,
             },
             [ChainId.ARBITRUM_ONE]: {
               tokenAddress: COINBASE_WRAPPED_STAKED_ETH_ARBITRUM_ONE.address,
@@ -453,17 +415,6 @@ describe(chainify, () => {
       },
       {
         ...Tokens[ChainId.ARBITRUM_ONE]!.COINBASE_WRAPPED_STAKED_ETH,
-        name: 'Coinbase Wrapped Staked ETH',
-        extensions: {
-          bridgeInfo: {
-            [ChainId.MAINNET]: {
-              tokenAddress: COINBASE_WRAPPED_STAKED_ETH.address,
-            },
-          },
-        },
-      },
-      {
-        ...Tokens[ChainId.BASE_GOERLI]!.COINBASE_WRAPPED_STAKED_ETH,
         name: 'Coinbase Wrapped Staked ETH',
         extensions: {
           bridgeInfo: {
