@@ -15,3 +15,33 @@ export type GenericMappedTokenData = { [key: string]: string | undefined }
 export type PolygonMappedTokenData = { [key: string]: PolygonMappedToken }
 
 export type MappedTokenData = { [key: string]: MappedToken }
+
+export interface PolygonWrappedToken {
+  wrappedTokenAddress: string
+  wrappedNetworkId?: number
+  tags: string[]
+  originChainBridgeAdapter?: string
+  wrappedChainBridgeAdapter?: string
+}
+
+export interface PolygonTokenMapping {
+  chainId: number
+  name: string
+  symbol: string
+  decimals: number
+  originTokenAddress: string
+  originNetworkId: number
+  tags: string[]
+  wrappedTokens: PolygonWrappedToken[]
+  logoURI: string
+}
+
+export interface PolygonTokenListResponse {
+  name: string
+  version: number
+  logoURI: string
+  description: string
+  tags: Record<string, { name: string; description: string }>
+  timestamp: string
+  tokens: PolygonTokenMapping[]
+}
