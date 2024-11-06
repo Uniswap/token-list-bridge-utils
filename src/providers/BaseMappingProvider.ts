@@ -3,7 +3,7 @@ import { ChainId } from '../constants/chainId'
 import { getTokenList } from '../utils'
 import { GenericMappedTokenData } from '../constants/types'
 
-const baseGoerliTokenListURL =
+const baseTokenListURL =
   'https://raw.githubusercontent.com/' +
   'ethereum-optimism/ethereum-optimism.github.io/master/optimism.tokenlist.json'
 
@@ -15,7 +15,7 @@ export class BaseMappingProvider implements MappingProvider {
   async provide(): Promise<GenericMappedTokenData> {
     const tokens: { [key: string]: string | undefined } = {}
 
-    let allTokens = await getTokenList(baseGoerliTokenListURL)
+    let allTokens = await getTokenList(baseTokenListURL)
 
     let opTokenId_baseAddressMap: Record<string, string> = {}
     allTokens.tokens.forEach((token) => {

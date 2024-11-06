@@ -118,8 +118,6 @@ export function getRpcUrl(chainId: ChainId): string {
       return 'https://alfajores-forno.celo-testnet.org/'
     case ChainId.BASE:
       return 'https://mainnet.base.org'
-    case ChainId.BASE_GOERLI:
-      return 'https://goerli.base.org'
     default:
   }
   throw new Error('Unsupported ChainId')
