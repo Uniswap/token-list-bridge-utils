@@ -6,6 +6,7 @@ import {
   COINBASE_WRAPPED_STAKED_ETH_ARBITRUM_ONE,
   COINBASE_WRAPPED_STAKED_ETH_BASE,
   COINBASE_WRAPPED_STAKED_ETH_OPTIMISM,
+  COINBASE_WRAPPED_STAKED_ETH_UNICHAIN,
   DAI,
   DAI_ARBITRUM_ONE,
   DAI_AVALANCHE,
@@ -13,6 +14,7 @@ import {
   DAI_BNB,
   DAI_OPTIMISM,
   DAI_POLYGON,
+  DAI_UNICHAIN,
 } from './constants/tokens'
 import {
   arbedSampleTokenList,
@@ -299,6 +301,9 @@ describe(chainify, () => {
             [ChainId.BASE]: {
               tokenAddress: DAI_BASE.address,
             },
+            [ChainId.UNICHAIN]: {
+              tokenAddress: DAI_UNICHAIN.address,
+            },
           },
         },
       },
@@ -315,6 +320,17 @@ describe(chainify, () => {
       },
       {
         ...Tokens[ChainId.BNB]!.DAI,
+        extensions: {
+          bridgeInfo: {
+            [ChainId.MAINNET]: {
+              tokenAddress: DAI.address,
+            },
+          },
+        },
+      },
+      {
+        ...Tokens[ChainId.UNICHAIN]!.DAI,
+        name: 'Dai Stablecoin',
         extensions: {
           bridgeInfo: {
             [ChainId.MAINNET]: {
@@ -388,11 +404,25 @@ describe(chainify, () => {
             [ChainId.ARBITRUM_ONE]: {
               tokenAddress: COINBASE_WRAPPED_STAKED_ETH_ARBITRUM_ONE.address,
             },
+            [ChainId.UNICHAIN]: {
+              tokenAddress: COINBASE_WRAPPED_STAKED_ETH_UNICHAIN.address,
+            },
           },
         },
       },
       {
         ...Tokens[ChainId.OPTIMISM]!.COINBASE_WRAPPED_STAKED_ETH,
+        name: 'Coinbase Wrapped Staked ETH',
+        extensions: {
+          bridgeInfo: {
+            [ChainId.MAINNET]: {
+              tokenAddress: COINBASE_WRAPPED_STAKED_ETH.address,
+            },
+          },
+        },
+      },
+      {
+        ...Tokens[ChainId.UNICHAIN]!.COINBASE_WRAPPED_STAKED_ETH,
         name: 'Coinbase Wrapped Staked ETH',
         extensions: {
           bridgeInfo: {

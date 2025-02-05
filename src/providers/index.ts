@@ -4,6 +4,7 @@ import { ArbitrumMappingProvider } from './ArbitrumMappingProvider'
 import { OptimismMappingProvider } from './OptimismMappingProvider'
 import { PolygonMappingProvider } from './PolygonMappingProvider'
 import { BnbMappingProvider } from './BnbMappingProvider'
+import { UnichainMappingProvider } from './UnichainMappingProvider'
 import { TokenInfo, TokenList } from '@uniswap/token-lists'
 import { ethers } from 'ethers'
 import {
@@ -35,6 +36,7 @@ const CHAINS_WITH_MAPPING_PROVIDERS = [
   ChainId.AVALANCHE,
   ChainId.CELO,
   ChainId.BASE,
+  ChainId.UNICHAIN,
 ]
 
 export async function buildList(
@@ -158,6 +160,8 @@ function getMappingProvider(chainId: ChainId, l1TokenList: TokenList) {
       return new CeloMappingProvider()
     case ChainId.BASE:
       return new BaseMappingProvider()
+    case ChainId.UNICHAIN:
+      return new UnichainMappingProvider()
     default:
       throw new Error(`Chain ${chainId} not supported for fetching mappings.`)
   }
@@ -225,7 +229,9 @@ async function getChildTokenDetails(
       : undefined
     const childTokenValid = Boolean(
       childTokenAddress &&
-        (await hasExistingTokenContract(childTokenAddress, chainId))
+        (chainId === ChainId.UNICHAIN // barring a unichain rpc url, we skip the contract call. Since we're using a manually curated list of tokens, we can assume they exist.
+          ? true
+          : await hasExistingTokenContract(childTokenAddress, chainId))
     )
     const decimals =
       childToken &&
