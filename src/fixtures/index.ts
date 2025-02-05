@@ -16,6 +16,8 @@ import {
   COINBASE_WRAPPED_STAKED_ETH_OPTIMISM,
   DAI_BASE,
   USDT_CELO,
+  COINBASE_WRAPPED_STAKED_ETH_UNICHAIN,
+  DAI_UNICHAIN,
 } from '../constants/tokens'
 import { compareTokenInfos } from '../utils'
 
@@ -55,6 +57,12 @@ export const Tokens: Partial<Record<ChainId, Record<string, TokenInfo>>> = {
   },
   [ChainId.CELO]: {
     USDT: tokenToTokenInfo(USDT_CELO),
+  },
+  [ChainId.UNICHAIN]: {
+    DAI: tokenToTokenInfo(DAI_UNICHAIN),
+    COINBASE_WRAPPED_STAKED_ETH: tokenToTokenInfo(
+      COINBASE_WRAPPED_STAKED_ETH_UNICHAIN
+    ),
   },
 }
 

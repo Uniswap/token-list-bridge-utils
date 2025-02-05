@@ -33,6 +33,14 @@ export const COINBASE_WRAPPED_STAKED_ETH_OPTIMISM = new Token(
   'Coinbase Wrapped Staked ETH'
 )
 
+export const COINBASE_WRAPPED_STAKED_ETH_UNICHAIN = new Token(
+  ChainId.UNICHAIN,
+  '0xEb64b50FeF2A363940369285F86Ae9a68211db59',
+  18,
+  'cbETH',
+  'Coinbase Wrapped Staked ETH'
+)
+
 export const DAI = new Token(
   ChainId.MAINNET,
   '0x6B175474E89094C44Da98b954EedeAC495271d0F',
@@ -81,6 +89,14 @@ export const DAI_AVALANCHE = new Token(
 export const DAI_BASE = new Token(
   ChainId.BASE,
   '0x50c5725949A6F0c72E6C4a641F24049A917DB0Cb',
+  18,
+  'DAI',
+  'Dai Stablecoin'
+)
+
+export const DAI_UNICHAIN = new Token(
+  ChainId.UNICHAIN,
+  '0x20CAb320A855b39F724131C69424240519573f81',
   18,
   'DAI',
   'Dai Stablecoin'
