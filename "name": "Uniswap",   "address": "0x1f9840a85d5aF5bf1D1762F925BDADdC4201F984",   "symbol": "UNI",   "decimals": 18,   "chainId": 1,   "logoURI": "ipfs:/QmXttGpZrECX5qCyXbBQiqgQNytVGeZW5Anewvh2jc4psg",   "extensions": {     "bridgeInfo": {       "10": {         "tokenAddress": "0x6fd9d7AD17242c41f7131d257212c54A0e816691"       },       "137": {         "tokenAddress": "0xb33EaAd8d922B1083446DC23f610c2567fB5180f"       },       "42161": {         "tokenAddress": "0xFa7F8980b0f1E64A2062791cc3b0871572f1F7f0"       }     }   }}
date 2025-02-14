@@ -1,0 +1,47 @@
+  "name": "Uniswap",
+  "address": "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984",
+  "symbol": "UNI",
+  "decimals": 18,
+  "chainId": 1,
+  "logoURI": "ipfs://QmXttGpZrECX5qCyXbBQiqgQNytVGeZW5Anewvh2jc4psg",
+  "extensions": {
+    "bridgeInfo": {
+      "10": {
+        "tokenAddress": "0x6fd9d7AD17242c41f7131d257212c54A0e816691"
+      },
+      "137": {
+        "tokenAddress": "0xb33EaAd8d922B1083446DC23f610c2567fB5180f"
+      },
+      "42161": {
+        "tokenAddress": "0xFa7F8980b0f1E64A2062791cc3b0871572f1F7f0"
+      }
+    }
+  }}{
+  "name": "Uniswap",
+  "address": "0x6fd9d7AD17242c41f7131d257212c54A0e816691",
+  "symbol": "UNI",
+  "decimals": 18,
+  "chainId": 10,
+  "logoURI": "ipfs://QmXttGpZrECX5qCyXbBQiqgQNytVGeZW5Anewvh2jc4psg",
+  "extensions": {
+    "bridgeInfo": {
+      "1": {
+        "tokenAddress": "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984"
+      }
+    }
+  }
+}{
+  "name": "Uniswap",
+  "address": "0x6fd9d7AD17242c41f7131d257212c54A0e816691",
+  "symbol": "UNI",
+  "decimals": 18,
+  "chainId": 10,
+  "logoURI": "ipfs://QmXttGpZrECX5qCyXbBQiqgQNytVGeZW5Anewvh2jc4psg",
+  "extensions": {
+    "bridgeInfo": {
+      "1": {
+        "tokenAddress": "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984"
+      }
+    }
+  }
+}npm start # or yarn start
