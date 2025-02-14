@@ -1135,10 +1135,6 @@
     "childToken": "0xcdfce5eb357e8976a80be84e94a03ba963b9e379",
     "decimals": 18
   },
-  "0x58d97b57bb95320f9a05dc918aef65434969c2b2": {
-    "childToken": "0x6695a2692dcd2a53e7766492447b5254a56425ad",
-    "decimals": 18
-  },
   "0x8df723295214ea6f21026eeeb4382d475f146f9f": {
     "childToken": "0xec42461d9bbdf4efb6481099253bbb7324d7d72d",
     "decimals": 6
