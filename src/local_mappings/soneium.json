@@ -1,0 +1,14 @@
+{
+  "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48": {
+    "childToken": "0xba9986d2381edf1da03b0b9c1f8b00dc4aacc369",
+    "decimals": 6
+  },
+  "0xdac17f958d2ee523a2206206994597c13d831ec7": {
+    "childToken": "0x3a337a6ada9d885b6ad95ec48f9b75f197b5ae35",
+    "decimals": 6
+  },
+  "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2": {
+    "childToken": "0x4200000000000000000000000000000000000006",
+    "decimals": 18
+  }
+}

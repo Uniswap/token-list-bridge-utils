@@ -27,6 +27,7 @@ export async function chainify(
     ChainId.AVALANCHE,
     ChainId.BASE,
     ChainId.UNICHAIN,
+    ChainId.SONEIUM,
   ]
 
   const chainified = await chainifyTokenList(l2Chains, l1TokenListOrPathOrUrl)
