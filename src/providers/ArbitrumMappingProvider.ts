@@ -23,14 +23,24 @@ export class ArbitrumMappingProvider implements MappingProvider {
       token.address.toLowerCase()
     )
 
-    const l2AddressesFromL1 = await getL2TokenAddressesFromL1(
-      tokenAddresses,
-      l1.multiCaller,
-      l2.network.tokenBridge.l1GatewayRouter
-    )
+    // batching calls to avoid rpc response size limits
+    const batchSize = 100
+    const batches: string[] = []
+    for (let i = 0; i < tokenAddresses.length; i += batchSize) {
+      const batch = tokenAddresses.slice(i, i + batchSize)
+      const batchResults = await getL2TokenAddressesFromL1(
+        batch,
+        l1.multiCaller,
+        l2.network.tokenBridge.l1GatewayRouter
+      )
+      const filteredResults = batchResults.filter(
+        (addr): addr is string => addr !== undefined
+      )
+      batches.push(...filteredResults)
+    }
 
     tokens = tokenAddresses.reduce(
-      (obj, key, index) => ({ ...obj, [key]: l2AddressesFromL1[index] }),
+      (obj, key, index) => ({ ...obj, [key]: batches[index] }),
       {}
     )
 
