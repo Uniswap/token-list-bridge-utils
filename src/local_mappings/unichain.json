@@ -1186,5 +1186,9 @@
   "0x72e4f9f808c49a2a61de9c5896298920dc4eeea9": {
     "childToken": "0x41f6e69166e81a9583dbc96604b01d2e9b3d706f",
     "decimals": 8
+  },
+  "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2": {
+    "childToken": "0x4200000000000000000000000000000000000006",
+    "decimals": 18
   }
 }
