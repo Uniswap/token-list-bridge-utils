@@ -24,6 +24,7 @@ import {
 import { AvalancheMappingProvider } from './AvalancheMappingProvider'
 import { BaseMappingProvider } from './BaseMappingProvider'
 import { CeloMappingProvider } from './CeloMappingProvider'
+import { SoneiumMappingProvider } from './SoneiumMappingProvider'
 
 const web3 = new Web3()
 
@@ -37,6 +38,7 @@ const CHAINS_WITH_MAPPING_PROVIDERS = [
   ChainId.CELO,
   ChainId.BASE,
   ChainId.UNICHAIN,
+  ChainId.SONEIUM,
 ]
 
 export async function buildList(
@@ -162,6 +164,8 @@ function getMappingProvider(chainId: ChainId, l1TokenList: TokenList) {
       return new BaseMappingProvider()
     case ChainId.UNICHAIN:
       return new UnichainMappingProvider()
+    case ChainId.SONEIUM:
+      return new SoneiumMappingProvider()
     default:
       throw new Error(`Chain ${chainId} not supported for fetching mappings.`)
   }
