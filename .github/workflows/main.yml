@@ -7,16 +7,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - uses: bullfrogsec/bullfrog@1831f79cce8ad602eef14d2163873f27081ebfb3 # v0.8.4
+
       - name: Checkout repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
 
       - name: Use Node 16.x
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@7c12f8017d5436eb855f1ed4399f037a36fbd9e8 # v2
         with:
           node-version: 16.x
 
       - name: Install deps and build (with cache)
-        uses: bahmutov/npm-install@v1
+        uses: bahmutov/npm-install@4488656f8e90d3c85e3a964db0018dd624f340e7 # v1
 
       - name: Lint
         run: yarn lint
