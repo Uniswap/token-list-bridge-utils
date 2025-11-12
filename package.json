@@ -47,7 +47,7 @@
     "deduplicate": "yarn-deduplicate --strategy=highest"
   },
   "typings": "dist/index.d.ts",
-  "version": "2.10.0",
+  "version": "2.11.0",
   "dependencies": {
     "@arbitrum/sdk": "^3.1.6",
     "@uniswap/sdk-core": "^4.0.6",
