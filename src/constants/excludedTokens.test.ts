@@ -105,12 +105,10 @@ describe('excludedTokens', () => {
     })
 
     it('stores addresses in lowercase', () => {
-      const arbitrumExcluded = Array.from(
-        EXCLUDED_TOKENS[ChainId.ARBITRUM_ONE]
-      )
-      expect(arbitrumExcluded.every((addr) => addr === addr.toLowerCase())).toBe(
-        true
-      )
+      const arbitrumExcluded = Array.from(EXCLUDED_TOKENS[ChainId.ARBITRUM_ONE])
+      expect(
+        arbitrumExcluded.every((addr) => addr === addr.toLowerCase())
+      ).toBe(true)
 
       const polygonExcluded = Array.from(EXCLUDED_TOKENS[ChainId.POLYGON])
       expect(polygonExcluded.every((addr) => addr === addr.toLowerCase())).toBe(

@@ -105,7 +105,6 @@ export async function buildList(
           chainId === ChainId.MAINNET ||
           chainIdToChildTokenDetailsMap[chainId].childTokenValid
         ) {
-
           const tokenInfo: TokenInfo =
             chainId === ChainId.MAINNET
               ? ({
