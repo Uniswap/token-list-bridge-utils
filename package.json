@@ -30,6 +30,10 @@
   },
   "license": "GPL-3.0-or-later",
   "main": "dist/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Uniswap/token-list-bridge-utils.git"
+  },
   "module": "dist/token-list-bridge-utils.esm.js",
   "name": "@uniswap/token-list-bridge-utils",
   "prettier": {
