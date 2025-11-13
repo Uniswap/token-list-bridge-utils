@@ -25,6 +25,7 @@ import { AvalancheMappingProvider } from './AvalancheMappingProvider'
 import { BaseMappingProvider } from './BaseMappingProvider'
 import { CeloMappingProvider } from './CeloMappingProvider'
 import { SoneiumMappingProvider } from './SoneiumMappingProvider'
+import { isTokenExcluded } from '../constants/excludedTokens'
 
 const web3 = new Web3()
 
@@ -72,10 +73,17 @@ export async function buildList(
             chainId,
             chainIdToMappingsMap
           )
-          if (chainIdToChildTokenDetailsMap[chainId].childTokenValid) {
+          const childTokenAddress =
+            chainIdToChildTokenDetailsMap[chainId].childTokenAddress
+
+          // Only add bridgeInfo if child token is valid and not excluded
+          if (
+            chainIdToChildTokenDetailsMap[chainId].childTokenValid &&
+            childTokenAddress &&
+            !isTokenExcluded(chainId, childTokenAddress)
+          ) {
             l2MappingExtension.extensions.bridgeInfo[chainId] = {
-              tokenAddress:
-                chainIdToChildTokenDetailsMap[chainId].childTokenAddress,
+              tokenAddress: childTokenAddress,
             }
           }
         })
@@ -83,6 +91,16 @@ export async function buildList(
 
       // build the TokenInfo objects with bridgeInfo extension
       l2ChainIds.concat([ChainId.MAINNET]).forEach((chainId) => {
+        const tokenAddress =
+          chainId === ChainId.MAINNET
+            ? l1Token.address
+            : chainIdToChildTokenDetailsMap[chainId]?.childTokenAddress
+
+        // Skip if token is excluded on this chain
+        if (tokenAddress && isTokenExcluded(chainId, tokenAddress)) {
+          return
+        }
+
         if (
           chainId === ChainId.MAINNET ||
           chainIdToChildTokenDetailsMap[chainId].childTokenValid
