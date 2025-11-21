@@ -23,4 +23,6 @@ export enum ChainId {
   UNICHAIN = 130,
 
   SONEIUM = 1868,
+
+  MONAD = 143,
 }
