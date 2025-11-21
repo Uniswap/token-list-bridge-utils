@@ -5,6 +5,7 @@ import { OptimismMappingProvider } from './OptimismMappingProvider'
 import { PolygonMappingProvider } from './PolygonMappingProvider'
 import { BnbMappingProvider } from './BnbMappingProvider'
 import { UnichainMappingProvider } from './UnichainMappingProvider'
+import { MonadMappingProvider } from './MonadMappingProvider'
 import { TokenInfo, TokenList } from '@uniswap/token-lists'
 import { ethers } from 'ethers'
 import {
@@ -40,6 +41,7 @@ const CHAINS_WITH_MAPPING_PROVIDERS = [
   ChainId.BASE,
   ChainId.UNICHAIN,
   ChainId.SONEIUM,
+  ChainId.MONAD,
 ]
 
 export async function buildList(
@@ -184,6 +186,8 @@ function getMappingProvider(chainId: ChainId, l1TokenList: TokenList) {
       return new UnichainMappingProvider()
     case ChainId.SONEIUM:
       return new SoneiumMappingProvider()
+    case ChainId.MONAD:
+      return new MonadMappingProvider()
     default:
       throw new Error(`Chain ${chainId} not supported for fetching mappings.`)
   }
@@ -251,7 +255,7 @@ async function getChildTokenDetails(
       : undefined
     const childTokenValid = Boolean(
       childTokenAddress &&
-        (chainId === ChainId.UNICHAIN // barring a unichain rpc url, we skip the contract call. Since we're using a manually curated list of tokens, we can assume they exist.
+        (chainId === ChainId.UNICHAIN || chainId === ChainId.MONAD // barring a unichain/monad rpc url, we skip the contract call. Since we're using a manually curated list of tokens, we can assume they exist.
           ? true
           : await hasExistingTokenContract(childTokenAddress, chainId))
     )

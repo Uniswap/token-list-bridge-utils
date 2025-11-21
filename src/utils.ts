@@ -97,7 +97,7 @@ export function getRpcUrl(chainId: ChainId): string {
     case ChainId.MAINNET:
       return 'https://ethereum-rpc.publicnode.com'
     case ChainId.OPTIMISM:
-      return 'https://rpc.ankr.com/optimism' // seems to have higher rate limit than https://mainnet.optimism.io/
+      return 'https://mainnet.optimism.io'
     case ChainId.OPTIMISTIC_KOVAN:
       return 'https://kovan.optimism.io'
     case ChainId.ARBITRUM_ONE:

@@ -1,0 +1,22 @@
+{
+  "0xdac17f958d2ee523a2206206994597c13d831ec7": {
+    "childToken": "0xe7cd86e13AC4309349F30B3435a9d337750fC82D",
+    "decimals": 6
+  },
+  "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599": {
+    "childToken": "0x0555E30da8f98308EdB960aa94C0Db47230d2B9c",
+    "decimals": 8
+  },
+  "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2": {
+    "childToken": "0xEE8c0E9f1BFFb4Eb878d8f15f368A02a35481242",
+    "decimals": 18
+  },
+  "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48": {
+    "childToken": "0x754704Bc059F8C67012fEd69BC8A327a5aafb603",
+    "decimals": 6
+  },
+  "0xd31a59c85ae9d8edefec411d448f90841571b89c": {
+    "childToken": "0xea17E5a9efEBf1477dB45082d67010E2245217f1",
+    "decimals": 9
+  }
+}
