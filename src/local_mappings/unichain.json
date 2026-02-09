@@ -1147,10 +1147,6 @@
     "childToken": "0xaa2109f14bb155766cba9e7fa8b8d4bf0ff19949",
     "decimals": 8
   },
-  "0x6033f7f88332b8db6ad452b7c6d5bb643990ae3f": {
-    "childToken": "0xc13c1aa97ef67a1ebd56830323b04c3a75df1903",
-    "decimals": 18
-  },
   "0x812ba41e071c7b7fa4ebcfb62df5f45f6fa853ee": {
     "childToken": "0xc1c06527e810c4a198d8c5d35e1ddbc987696276",
     "decimals": 9
