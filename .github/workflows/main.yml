@@ -1,5 +1,6 @@
 name: CI
 on: [push]
+permissions: {}
 jobs:
   build:
     name: Build, lint, and test on Node 16.x and ubuntu-latest
@@ -11,6 +12,8 @@ jobs:
 
       - name: Checkout repo
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          persist-credentials: false
 
       - name: Use Node 16.x
         uses: actions/setup-node@7c12f8017d5436eb855f1ed4399f037a36fbd9e8 # v2
