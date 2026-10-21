@@ -105,7 +105,7 @@ export function getRpcUrl(chainId: ChainId): string {
     case ChainId.ARBITRUM_RINKEBY:
       return 'https://rinkeby.arbitrum.io/rpc'
     case ChainId.POLYGON:
-      return 'https://polygon-rpc.com/'
+      return 'https://polygon-bor-rpc.publicnode.com'
     case ChainId.POLYGON_MUMBAI:
       return 'https://rpc-endpoints.superfluid.dev/mumbai'
     case ChainId.BNB:
